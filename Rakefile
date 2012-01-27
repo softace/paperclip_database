@@ -1,49 +1,41 @@
-# encoding: utf-8
+require 'bundler/gem_tasks'
+require 'appraisal'
+require 'rake/testtask'
+require 'cucumber/rake/task'
 
-require 'rubygems'
-require 'bundler'
-begin
-  Bundler.setup(:default, :development)
-rescue Bundler::BundlerError => e
-  $stderr.puts e.message
-  $stderr.puts "Run `bundle install` to install missing gems"
-  exit e.status_code
-end
-require 'rake'
+desc 'Default: run unit tests.'
+task :default => [:clean, 'appraisal:install', :all]
 
-require 'jeweler'
-Jeweler::Tasks.new do |gem|
-  # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "paperclip_database"
-  gem.homepage = "http://github.com/jarl-dk/paperclip_database"
-  gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
-  gem.email = "jarl@softace.dk"
-  gem.authors = ["Jarl Friis"]
-  # dependencies defined in Gemfile
-end
-Jeweler::RubygemsDotOrgTasks.new
-
-require 'rspec/core'
-require 'rspec/core/rake_task'
-RSpec::Core::RakeTask.new(:spec) do |spec|
-  spec.pattern = FileList['spec/**/*_spec.rb']
+desc 'Test the paperclip_database plugin under all supported Rails versions.'
+task :all do |t|
+  exec('rake appraisal test cucumber')
 end
 
-RSpec::Core::RakeTask.new(:rcov) do |spec|
-  spec.pattern = 'spec/**/*_spec.rb'
-  spec.rcov = true
+desc 'Test the paperclip plugin.'
+Rake::TestTask.new(:test) do |t|
+  t.libs << 'lib' << 'profile'
+  t.pattern = 'test/**/*_test.rb'
+  t.verbose = true
 end
 
-task :default => :spec
+desc 'Run integration test'
+Cucumber::Rake::Task.new do |t|
+  t.cucumber_opts = %w{--format progress}
+end
 
-require 'rdoc/task'
-Rake::RDocTask.new do |rdoc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
+desc 'Start an IRB session with all necessary files required.'
+task :shell do |t|
+  chdir File.dirname(__FILE__)
+  exec 'irb -I lib/ -I lib/paperclip_database -r rubygems -r active_record -r paperclip -r tempfile -r init'
+end
 
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "paperclip_database #{version}"
-  rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+desc 'Clean up files.'
+task :clean do |t|
+  FileUtils.rm_rf "doc"
+  FileUtils.rm_rf "tmp"
+  FileUtils.rm_rf "pkg"
+  FileUtils.rm_rf "public"
+  FileUtils.rm "test/debug.log" rescue nil
+  FileUtils.rm "test/paperclip_database.db" rescue nil
+  Dir.glob("paperclip_database-*.gem").each{|f| FileUtils.rm f }
 end
