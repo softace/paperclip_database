@@ -1,0 +1,5 @@
+Usage:
+
+  script/generate paperclip_database model attachment
+
+This will create a migration that will add the proper table for the attachments.

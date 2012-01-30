@@ -11,8 +11,12 @@ Feature: Rails integration
   Scenario: Database integration test
     Given I add this snippet to the User model:
       """
-      has_attached_file :attachment
+      has_attached_file :attachment,
+                        :storage => :database,
+                        :database_table => :user_attachments,
       """
+    And I run a paperclip_database generator to create storage for paperclip "attachment" to the "User" model
+    And I run a migration
     And I start the rails application
     When I go to the new user page
     And I fill in "Name" with "something"
@@ -20,5 +24,6 @@ Feature: Rails integration
     And I press "Submit"
     Then I should see "Name: something"
     And I should see an image with a path of "/system/attachments/1/original/5k.png"
-    And the file at "/system/attachments/1/original/5k.png" should be the same as "test/fixtures/5k.png"
+#    And the table "attachments" should contain 3 rows.
+    And the result of "User.first.attachment.file_for(:original).file_contents" should be the same as "test/fixtures/5k.png"
 

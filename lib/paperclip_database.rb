@@ -1,2 +1,4 @@
 require 'paperclip'
-require 'paperclip/version'
+require 'paperclip/storage/database'
+require 'paperclip_database/version'
+

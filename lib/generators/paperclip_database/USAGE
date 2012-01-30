@@ -1,0 +1,8 @@
+Description:
+    The generator generates a database migration for the paperclip database storage
+
+Example:
+    rails generate paperclip_database Class attachments
+
+    This will create:
+        what/will/it/create

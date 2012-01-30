@@ -1,0 +1,17 @@
+class <%= migration_class_name %> < ActiveRecord::Migration
+  def self.up
+<% attachment_names.each do |attachment| -%>
+    create_table :<%= class_name.underscore %>_<%= attachment.pluralize %> do |t|
+      t.integer    :<%= class_name.underscore %>_id
+      t.string     :style
+      t.binary     :file_contents
+    end
+<% end -%>
+  end
+
+  def self.down
+<% attachment_names.each do |attachment| -%>
+    drop_table :<%= class_name.underscore %>_<%= attachment.pluralize %>
+<% end -%>
+  end
+end

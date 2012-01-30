@@ -27,6 +27,10 @@ Given /^I run a paperclip generator to add a paperclip "([^"]*)" to the "([^"]*)
   step %[I successfully run `bundle exec #{generator_command} paperclip #{model_name} #{attachment_name}`]
 end
 
+Given /^I run a paperclip_database generator to create storage for paperclip "(.*?)" to the "(.*?)" model$/ do |attachment_name, model_name|
+  step %[I successfully run `bundle exec #{generator_command} paperclip_database #{model_name} #{attachment_name}`]
+end
+
 Given /^I run a migration$/ do
   step %[I successfully run `bundle exec rake db:migrate`]
 end
@@ -125,14 +129,13 @@ Given /^I add the paperclip rake task to a Rails 2.3 application$/ do
 end
 
 Then /^the file at "([^"]*)" should be the same as "([^"]*)"$/ do |web_file, path|
-  expected = IO.read(path)
+  expected = IO.binread(path)
   actual = if web_file.match %r{^https?://}
     Net::HTTP.get(URI.parse(web_file))
   else
     visit(web_file)
     page.source
   end
-  actual.force_encoding("UTF-8") if actual.respond_to?(:force_encoding)
   actual.should == expected
 end
 
@@ -156,6 +159,13 @@ end
 When /^I comment out the gem "(.*?)" from the Gemfile$/ do |gemname|
   comment_out_gem_in_gemfile gemname
 end
+
+Then /^the result of "(.*?)" should be the same as "(.*?)"$/ do |rails_expr, path|
+  expected = IO.binread(path)
+  actual = eval "#{rails_expr}"
+  actual.should == expected
+end
+
 
 module FileHelpers
   def append_to(path, contents)
