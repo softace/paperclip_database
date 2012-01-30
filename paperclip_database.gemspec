@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.platform          = Gem::Platform::RUBY
   s.author            = "Jarl Friis"
   s.email             = ["jarl@softace.dk"]
-  s.homepage          = "https://github.com/Softace/paperclip_database"
+  s.homepage          = "https://github.com/softace/paperclip_database"
   s.summary           = "Database storage for paperclip"
   s.description       = "To have all your data i one place: the database"
 

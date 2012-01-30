@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    paperclip_database (0.0.1)
+    paperclip_database (0.0.2)
       paperclip (>= 2.5.0)
 
 GEM
@@ -57,7 +57,7 @@ GEM
       metaclass (~> 0.0.1)
     multi_json (1.0.4)
     nokogiri (1.5.0)
-    paperclip (2.5.1)
+    paperclip (2.5.2)
       activerecord (>= 2.3.0)
       activesupport (>= 2.3.2)
       cocaine (>= 0.0.2)
