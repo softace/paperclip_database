@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    paperclip_database (0.0.2)
+    paperclip_database (0.1.0)
       paperclip
 
 GEM
