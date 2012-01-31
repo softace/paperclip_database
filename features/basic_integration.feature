@@ -14,6 +14,18 @@ Feature: Rails integration
       has_attached_file :attachment,
                         :storage => :database,
                         :database_table => :user_attachments,
+                        :url => '/user_attachment_views/:id?style=:style'
+      """
+    And I run a rails generator to generate a "UserAttachmentView" scaffold with ""
+    Given I add this snippet to the "user_attachment_views" controller:
+      """
+        def show
+          style = params[:style] ? params[:style] : 'original'
+          record = User.find(params[:id])
+          send_data record.attachment.file_contents(style),
+                      :filename => record.attachment_file_name,
+                      :type => record.attachment_content_type
+        end
       """
     And I run a paperclip_database generator to create storage for paperclip "attachment" to the "User" model
     And I run a migration
@@ -23,7 +35,6 @@ Feature: Rails integration
     And I attach the file "test/fixtures/5k.png" to "Attachment"
     And I press "Submit"
     Then I should see "Name: something"
-    And I should see an image with a path of "/system/attachments/1/original/5k.png"
-#    And the table "attachments" should contain 3 rows.
-    And the result of "User.first.attachment.file_for(:original).file_contents" should be the same as "test/fixtures/5k.png"
+    And I should see an image with a path of "/user_attachment_views/1?style=original"
+    And the file at "/user_attachment_views/1?style=original" should be the same as "test/fixtures/5k.png"
 

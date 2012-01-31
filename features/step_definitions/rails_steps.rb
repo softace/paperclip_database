@@ -11,7 +11,7 @@ Given /^I generate a new rails application$/ do
       gem "capybara"
       gem "gherkin"
       gem "aws-sdk"
-      gem "paperclip"
+      gem "paperclip", "#{paperclip_version}"
       """
     And I configure the application to use "paperclip_database" from this project
     And I reset Bundler environment variable
@@ -77,6 +77,14 @@ end
 
 Given /^I add this snippet to the User model:$/ do |snippet|
   file_name = "app/models/user.rb"
+  in_current_dir do
+    content = File.read(file_name)
+    File.open(file_name, 'w') { |f| f << content.sub(/end\Z/, "#{snippet}\nend") }
+  end
+end
+
+Given /^I add this snippet to the "(.*?)" controller:$/ do |controller_name, snippet|
+  file_name = "app/controllers/#{controller_name}_controller.rb"
   in_current_dir do
     content = File.read(file_name)
     File.open(file_name, 'w') { |f| f << content.sub(/end\Z/, "#{snippet}\nend") }

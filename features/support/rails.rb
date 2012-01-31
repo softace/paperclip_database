@@ -43,4 +43,16 @@ module RailsCommandHelpers
     framework_version?("3") ? "script/rails runner" : "script/runner"
   end
 end
+
+module PaperclipGemHelpers
+  def paperclip_version?(version_string)
+    paperclip_version =~ /^#{version_string}/
+  end
+
+  def paperclip_version
+    @paperclip_version = Gem::Specification.find_by_name('paperclip').version.to_s
+  end
+end
+
 World(RailsCommandHelpers)
+World(PaperclipGemHelpers)

@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
 
   s.requirements << "ImageMagick"
 
-  s.add_dependency('paperclip', '>= 2.5.0')
+  s.add_dependency('paperclip')
 
 #  s.add_development_dependency('shoulda')
   s.add_development_dependency('appraisal', '~> 0.4.0')

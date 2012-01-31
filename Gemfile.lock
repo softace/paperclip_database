@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     paperclip_database (0.0.2)
-      paperclip (>= 2.5.0)
+      paperclip
 
 GEM
   remote: http://rubygems.org/

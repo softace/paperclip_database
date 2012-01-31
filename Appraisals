@@ -1,3 +1,9 @@
+appraise "rails2_legacy" do
+  gem "rails", "~> 2.3.14"
+  gem "paperclip", "2.3.1"
+  gem "paperclip_database", :path => "../"
+end
+
 appraise "rails2" do
   gem "rails", "~> 2.3.14"
   gem "paperclip_database", :path => "../"
