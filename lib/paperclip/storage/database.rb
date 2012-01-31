@@ -89,6 +89,7 @@ module Paperclip
         end
         @database_table = @options[:database_table] || name.to_s.pluralize
         @paperclip_file.set_table_name @database_table
+        @paperclip_file.validates_uniqueness_of :style, :scope => instance.class.table_name.classify.underscore + '_id'
         case Rails::VERSION::STRING
         when /^2/
           @paperclip_file.named_scope :file_for, lambda {|style| { :conditions => ['style = ?', style] }}
@@ -162,10 +163,9 @@ module Paperclip
       def flush_writes
         ActiveRecord::Base.logger.info("[paperclip] Writing files for #{name}")
         @queued_for_write.each do |style, file|
-          paperclip_file = @paperclip_file.new
+          paperclip_file = instance.send(@paperclip_files).send(:find_or_create_by_style, style.to_s)
           paperclip_file.file_contents = file.read
-          paperclip_file.style = style.to_s;
-          instance.send(@paperclip_files) << paperclip_file
+          paperclip_file.save!
         end        
         @queued_for_write = {}
       end
