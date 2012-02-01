@@ -84,18 +84,18 @@ module Paperclip
         @paperclip_files = "#{instance.class.name.underscore}_#{name.to_s}_paperclip_files"
         if !Object.const_defined?(@paperclip_files.classify)
           @paperclip_file = Object.const_set(@paperclip_files.classify, Class.new(::ActiveRecord::Base))
+          @paperclip_file.set_table_name @options[:database_table] || name.to_s.pluralize
+          @paperclip_file.validates_uniqueness_of :style, :scope => instance.class.table_name.classify.underscore + '_id'
+          case Rails::VERSION::STRING
+          when /^2/
+            @paperclip_file.named_scope :file_for, lambda {|style| { :conditions => ['style = ?', style] }}
+          else # 3.x
+            @paperclip_file.scope :file_for, lambda {|style| { :conditions => ['style = ?', style] }}
+          end
         else
           @paperclip_file = Object.const_get(@paperclip_files.classify)
         end
-        @database_table = @options[:database_table] || name.to_s.pluralize
-        @paperclip_file.set_table_name @database_table
-        @paperclip_file.validates_uniqueness_of :style, :scope => instance.class.table_name.classify.underscore + '_id'
-        case Rails::VERSION::STRING
-        when /^2/
-          @paperclip_file.named_scope :file_for, lambda {|style| { :conditions => ['style = ?', style] }}
-        else # 3.x
-          @paperclip_file.scope :file_for, lambda {|style| { :conditions => ['style = ?', style] }}
-        end
+        @database_table = @paperclip_file.table_name
         #FIXME: This fails when using  set_table_name "<myname>" in your model
         #FIXME: This should be fixed in ActiveRecord...
         instance.class.has_many @paperclip_files, :foreign_key => instance.class.table_name.classify.underscore + '_id'
