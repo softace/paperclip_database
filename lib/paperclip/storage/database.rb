@@ -26,8 +26,8 @@ module Paperclip
     # end
     # execute 'ALTER TABLE avatars ADD COLUMN file_contents LONGBLOB'
     # 
-    # You can optionally specify any storage table name you want as follows:
-    #   has_attached_file :avatar, :storage => :database, :database_table => 'avatar_files'
+    # You can optionally specify any storage table name you want and whether or not deletion is done by cascading or not as follows:
+    #   has_attached_file :avatar, :storage => :database, :database_table => 'avatar_files', :cascade_deletion => true
     # 
     # 3. By default, URLs will be set to this pattern:
     #   /:relative_root/:class/:attachment/:id?style=:style
@@ -174,7 +174,11 @@ module Paperclip
         ActiveRecord::Base.logger.info("[paperclip] Deleting files for #{name}")
         @queued_for_delete.each do |path|
           /id=([0-9]+)/.match(path)
-          @paperclip_file.destroy $1
+          if @options[:cascade_deletion] && !instance.class.exists?(instance.id)
+            raise RuntimeError, "Deletion has not been done by through cascading." if @paperclip_file.exists?($1)
+          else
+            @paperclip_file.destroy $1
+          end
         end
         @queued_for_delete = []
       end
