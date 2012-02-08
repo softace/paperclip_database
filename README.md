@@ -17,6 +17,7 @@ Paperclip Database Storage is distributed as a gem, which is how it
 should be used in your app.
 
 Include the gem in your Gemfile:
+
     gem "paperclip_database", "~> 2.0"
 
 Or, if you want to get the latest, you can get master from the main
@@ -65,9 +66,11 @@ There is a migration generator that will create a basic migration for
 the extra table.
 
 On the console (rails 2):
+
     ./script/generate paperclip_database_migration User avatar
 
 On the console (rails 3):
+
     rails generate paperclip_database_migration User avatar
 
 The generated migration should be sufficient, but yo may consider
