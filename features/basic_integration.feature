@@ -15,6 +15,7 @@ Feature: Rails integration
                         :storage => :database,
                         :database_table => :user_attachments,
                         :url => '/user_attachment_views/:id?style=:style'
+      attr_accessible :name, :attachment
       """
     And I run a rails generator to generate a "UserAttachmentView" scaffold with ""
     Given I add this snippet to the "user_attachment_views" controller:

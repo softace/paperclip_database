@@ -84,13 +84,13 @@ module Paperclip
         @paperclip_files = "#{instance.class.name.underscore}_#{name.to_s}_paperclip_files"
         if !Object.const_defined?(@paperclip_files.classify)
           @paperclip_file = Object.const_set(@paperclip_files.classify, Class.new(::ActiveRecord::Base))
-          @paperclip_file.set_table_name @options[:database_table] || name.to_s.pluralize
+          @paperclip_file.table_name = @options[:database_table] || name.to_s.pluralize
           @paperclip_file.validates_uniqueness_of :style, :scope => instance.class.table_name.classify.underscore + '_id'
           case Rails::VERSION::STRING
           when /^2/
             @paperclip_file.named_scope :file_for, lambda {|style| { :conditions => ['style = ?', style] }}
           else # 3.x
-            @paperclip_file.scope :file_for, lambda {|style| { :conditions => ['style = ?', style] }}
+            @paperclip_file.scope :file_for, lambda {|style| @paperclip_file.where('style = ?', style) }
           end
         else
           @paperclip_file = Object.const_get(@paperclip_files.classify)
@@ -139,6 +139,7 @@ module Paperclip
           @queued_for_write[style]
         elsif exists?(style)
           tempfile = Tempfile.new instance_read(:file_name)
+          tempfile.binmode
           tempfile.write file_contents(style)
           tempfile.flush
           tempfile.rewind
@@ -166,6 +167,7 @@ module Paperclip
           paperclip_file = instance.send(@paperclip_files).send(:find_or_create_by_style, style.to_s)
           paperclip_file.file_contents = file.read
           paperclip_file.save!
+          instance.reload
         end        
         @queued_for_write = {}
       end
