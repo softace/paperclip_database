@@ -102,7 +102,11 @@ module Paperclip
 
       end
       private :setup_paperclip_files_model
-        
+      
+      def copy_to_local_file(style, dest_path)
+        File.open(dest_path, 'wb+'){|df| to_file(style).tap{|sf| File.copy_stream(sf, df); sf.close;sf.unlink} }
+      end
+
       def override_default_options(base)
         if @options[:url] == base.class.default_options[:url]
           @options[:url] = ":relative_root/:class/:attachment/:id?style=:style"
@@ -174,6 +178,7 @@ module Paperclip
  
       def flush_deletes #:nodoc:
         ActiveRecord::Base.logger.info("[paperclip] Deleting files for #{name}")
+        @queued_for_delete.uniq! ##This is apparently necessary for paperclip v 3.x
         @queued_for_delete.each do |path|
           /id=([0-9]+)/.match(path)
           if @options[:cascade_deletion] && !instance.class.exists?(instance.id)
