@@ -41,6 +41,11 @@ For rails 2 you should add this to snippet to your environment.
       ...
     end
 
+Supported Versions
+------------------
+
+Supported version are rails >= 2.3 and paperclip version >= 2.5
+
 Quick Start
 -----------
 
@@ -80,12 +85,30 @@ you add a refferential constraint with the option `ON DELETE CASCADE`,
 then you need to add the option `:cascade_deletion => true` to your
 paperclip `has_attached_file` declaration.
 
+Development
+-----------
+
+To start develop, please download the source code
+
+    git clone git://github.com/softace/paperclip_database.git
+
+When downloaded, you can start issuing the commands like
+
+    bundle install
+    bundle exec rake appraisal:gemfiles
+    bundle exec rake appraisal:install
+    bundle exec rake all
+
+Or you can see what other options are there:
+
+    bundle exec rake -T
+
 
 History
 -------
 
-Paperclip Database Storage is heavily inspired by
-[this blog](http://patshaughnessy.net/2009/2/19/database-storage-for-paperclip). The
+Paperclip Database Storage is heavily inspired by [this blog by Pat
+Shaughnessy](http://patshaughnessy.net/2009/2/19/database-storage-for-paperclip). The
 initial source code for that blog is no longer available, but the code
 in this gem is based on that initial code.
 
