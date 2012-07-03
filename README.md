@@ -18,7 +18,7 @@ should be used in your app.
 
 Include the gem in your Gemfile:
 
-    gem "paperclip_database", "~> 2.0"
+    gem "paperclip_database", "~> 1.0"
 
 Or, if you want to get the latest, you can get master from the main
 paperclip repository:
@@ -37,7 +37,7 @@ For rails 2 you should add this to snippet to your environment.
     ...
     Rails::Initializer.run do |config|
       ...
-      config.gem "paperclip", :version => "~> 2.4"
+      config.gem "paperclip", :version => "~> 2.5"
       ...
     end
 
