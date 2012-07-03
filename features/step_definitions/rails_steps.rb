@@ -10,7 +10,6 @@ Given /^I generate a new rails application$/ do
       gem "sqlite3"
       gem "capybara"
       gem "gherkin"
-      gem "aws-sdk"
       gem "paperclip", "#{paperclip_version}"
       """
     And I configure the application to use "paperclip_database" from this project
