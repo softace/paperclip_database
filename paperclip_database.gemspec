@@ -20,14 +20,14 @@ Gem::Specification.new do |s|
 
   s.requirements << "ImageMagick"
 
-  s.add_dependency('paperclip')
+  s.add_dependency('paperclip', '>= 2.3.0')
 
 #  s.add_development_dependency('shoulda')
-  s.add_development_dependency('appraisal', '~> 0.4.1')
+  s.add_development_dependency('appraisal', '~> 0.4')
   s.add_development_dependency('mocha')
-  s.add_development_dependency('sqlite3', '~> 1.3.4')
-  s.add_development_dependency('cucumber', '~> 1.1.0')
-  s.add_development_dependency('launchy', '~> 2.1.0')
+  s.add_development_dependency('sqlite3', '~> 1.3')
+  s.add_development_dependency('cucumber', '~> 1.1')
+  s.add_development_dependency('launchy', '~> 2.1')
   s.add_development_dependency('aruba')
   s.add_development_dependency('capybara')
   s.add_development_dependency('bundler')

@@ -2,8 +2,8 @@
 
 source "http://rubygems.org"
 
-gem "rails", "~> 3.0"
-gem "paperclip", "~> 2.5"
+gem "rails", "~> 3.0.0"
+gem "paperclip", "~> 2.5.0"
 gem "paperclip_database", :path=>"../"
 
 gemspec :path=>"../"
