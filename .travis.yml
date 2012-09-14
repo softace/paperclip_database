@@ -2,12 +2,8 @@ language: ruby
 rvm:
   - 1.9.2
   - 1.9.3
-  - jruby-19mode
-  - rbx-19mode
-  - ree
 gemfile:
   - gemfiles/rails2_legacy.gemfile
-  - gemfiles/rails2_paperclip2.gemfile
   - gemfiles/rails2_paperclip27.gemfile
   - gemfiles/rails30_paperclip25.gemfile
   - gemfiles/rails30_paperclip27.gemfile
