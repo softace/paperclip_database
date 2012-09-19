@@ -74,18 +74,20 @@ the extra table.
 
 On the console (rails 2):
 
-    ./script/generate paperclip_database_migration User avatar
+    ./script/generate paperclip_database User avatar
 
 On the console (rails 3):
 
-    rails generate paperclip_database_migration User avatar
+    bundle exec ./script/rails generate paperclip_database:migration User avatar
 
-The generated migration should be sufficient, but yo may consider
-adding additional code to it such as `t.timestamps` for adding
-standard rails timesstamps or a referential database constraint. If
-you add a refferential constraint with the option `ON DELETE CASCADE`,
-then you need to add the option `:cascade_deletion => true` to your
-paperclip `has_attached_file` declaration.
+The generated migration should be sufficient, but you may consider
+adding additional code to the migration such as `t.timestamps` for
+adding standard rails timesstamps or a referential database
+constraint. If you add a refferential constraint with the option `ON
+DELETE CASCADE`, then you need to add the option `:cascade_deletion =>
+true` to your paperclip `has_attached_file` declaration to let
+PaperclipDatabase know that the Database takes care of it. Otherwise
+PaperclipDatabase will do the cascade deletion.
 
 Development
 -----------

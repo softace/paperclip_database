@@ -2,8 +2,8 @@ Feature: Rails integration
 
   Background:
     Given I generate a new rails application
-    And I run a rails generator to generate a "User" scaffold with "name:string"
-    And I run a paperclip generator to add a paperclip "attachment" to the "User" model
+    And I run a "scaffold" generator to generate a "User" scaffold with "name:string"
+    And I run a "paperclip" generator to add a paperclip "attachment" to the "User" model
     And I run a migration
     And I update my new user view to include the file upload field
     And I update my user view to include the attachment
@@ -17,7 +17,7 @@ Feature: Rails integration
                         :url => '/user_attachment_views/:id?style=:style'
       attr_accessible :name, :attachment
       """
-    And I run a rails generator to generate a "UserAttachmentView" scaffold with ""
+    And I run a "scaffold" generator to generate a "UserAttachmentView" scaffold with ""
     Given I add this snippet to the "user_attachment_views" controller:
       """
         def show
@@ -28,7 +28,7 @@ Feature: Rails integration
                       :type => record.attachment_content_type
         end
       """
-    And I run a paperclip_database generator to create storage for paperclip "attachment" to the "User" model
+    And I run a "paperclip_database:migration" generator to create storage for paperclip "attachment" to the "User" model
     And I run a migration
     And I start the rails application
     When I go to the new user page

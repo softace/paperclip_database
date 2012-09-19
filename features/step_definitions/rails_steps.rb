@@ -18,16 +18,19 @@ Given /^I generate a new rails application$/ do
   }
 end
 
-Given /^I run a rails generator to generate a "([^"]*)" scaffold with "([^"]*)"$/ do |model_name, attributes|
-  step %[I successfully run `bundle exec #{generator_command} scaffold #{model_name} #{attributes}`]
+Given /^I run a "(.*?)" generator to generate a "(.*?)" scaffold with "(.*?)"$/ do |generator_name, model_name, attributes|
+  step %[I successfully run `bundle exec #{generator_command} #{generator_name} #{model_name} #{attributes}`]
 end
 
-Given /^I run a paperclip generator to add a paperclip "([^"]*)" to the "([^"]*)" model$/ do |attachment_name, model_name|
-  step %[I successfully run `bundle exec #{generator_command} paperclip #{model_name} #{attachment_name}`]
+Given /^I run a "(.*?)" generator to add a paperclip "(.*?)" to the "(.*?)" model$/ do |generator_name, attachment_name, model_name|
+  step %[I successfully run `bundle exec #{generator_command} #{generator_name} #{model_name} #{attachment_name}`]
 end
 
-Given /^I run a paperclip_database generator to create storage for paperclip "(.*?)" to the "(.*?)" model$/ do |attachment_name, model_name|
-  step %[I successfully run `bundle exec #{generator_command} paperclip_database #{model_name} #{attachment_name}`]
+Given /^I run a "(.*?)" generator to create storage for paperclip "(.*?)" to the "(.*?)" model$/ do |generator_name, attachment_name, model_name|
+  if framework_version?("2")
+    generator_name = rails2_generator_name(generator_name)
+  end
+  step %[I successfully run `bundle exec #{generator_command} #{generator_name} #{model_name} #{attachment_name}`]
 end
 
 Given /^I run a migration$/ do

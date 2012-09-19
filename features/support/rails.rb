@@ -42,6 +42,14 @@ module RailsCommandHelpers
   def runner_command
     framework_version?("3") ? "script/rails runner" : "script/runner"
   end
+
+  def rails2_generator_name(rails3_generator_name)
+    case rails3_generator_name
+    when "paperclip_database:migration" then "paperclip_database"
+    else rails3_generator_name
+    end
+  end
+
 end
 
 module PaperclipGemHelpers
