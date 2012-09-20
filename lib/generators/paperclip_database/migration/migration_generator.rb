@@ -18,7 +18,7 @@ module PaperclipDatabase
       end
 
       def generate_migration
-        migration_template "paperclip_database_migration.rb.erb", "db/migrate/#{migration_file_name}"
+        migration_template "migration.rb.erb", "db/migrate/#{migration_file_name}"
       end
 
       protected
