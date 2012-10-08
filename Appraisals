@@ -101,6 +101,12 @@ appraise "rails31_paperclip32" do
   gem "paperclip_database", :path => "../"
 end
 
+appraise "rails31_paperclip33" do
+  gem "rails", "~> 3.1.0"
+  gem "paperclip", "~> 3.3.0"
+  gem "paperclip_database", :path => "../"
+end
+
 
 ## Rails 3.2
 
@@ -137,6 +143,12 @@ end
 appraise "rails32_paperclip32" do
   gem "rails", "~> 3.2.0"
   gem "paperclip", "~> 3.2.0"
+  gem "paperclip_database", :path => "../"
+end
+
+appraise "rails32_paperclip33" do
+  gem "rails", "~> 3.2.0"
+  gem "paperclip", "~> 3.3.0"
   gem "paperclip_database", :path => "../"
 end
 
