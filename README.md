@@ -12,6 +12,10 @@ Requirements
 
 `paperclip_database` depends on `paperclip`
 
+It is recommended to use the
+[trim_blobs](https://github.com/softace/trim_blobs) gem to limit the
+logging of BLOB data in your logfiles.
+
 Installation
 ------------
 
