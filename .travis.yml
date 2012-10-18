@@ -1,5 +1,6 @@
 language: ruby
 rvm:
+  - 1.8.7
   - 1.9.2
   - 1.9.3
 gemfile:
@@ -17,3 +18,12 @@ gemfile:
   - gemfiles/rails32_paperclip2x.gemfile
   - gemfiles/rails32_paperclip30.gemfile
   - gemfiles/rails32_paperclip3x.gemfile
+matrix:
+  allow_failures:
+    - rvm: 1.8.7
+      gemfile: gemfiles/rails30_paperclip23.gemfile
+    - rvm: 1.9.2
+      gemfile: gemfiles/rails30_paperclip23.gemfile
+    - rvm: 1.9.3
+      gemfile: gemfiles/rails30_paperclip23.gemfile
+    
