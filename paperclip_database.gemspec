@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.email             = ["jarl@softace.dk"]
   s.homepage          = "https://github.com/softace/paperclip_database"
   s.summary           = "Database storage for paperclip"
-  s.description       = "To have all your data i one place: the database"
+  s.description       = "To have all your data in one place: the database"
 
   s.rubyforge_project = "paperclip_database"
 
@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('cucumber', '~> 1.1')
   s.add_development_dependency('launchy', '~> 2.1')
   s.add_development_dependency('aruba')
-  s.add_development_dependency('capybara')
+  s.add_development_dependency('capybara', '~> 2.0.0', '< 2.1.0')
   s.add_development_dependency('bundler')
   s.add_development_dependency('rake')
   s.add_development_dependency('fakeweb')
