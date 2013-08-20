@@ -1,7 +1,9 @@
 Paperclip Database Storage
 ==========================
 
-[![Build Status](https://secure.travis-ci.org/softace/paperclip_database.png)](http://travis-ci.org/softace/paperclip_database) [![Dependency Status](https://gemnasium.com/softace/paperclip_database.png)](https://gemnasium.com/softace/paperclip_database) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/softace/paperclip_database)
+[![Build Status](https://secure.travis-ci.org/softace/paperclip_database.png)](http://travis-ci.org/softace/paperclip_database)
+[![Dependency Status](https://gemnasium.com/softace/paperclip_database.png)](https://gemnasium.com/softace/paperclip_database)
+[![Code Climate](https://codeclimate.com/github/softace/paperclip_database.png)](https://codeclimate.com/github/softace/paperclip_database)
 
 Paperclip Database Storage is an additional storage option for
 Paperclip. It give you the opportunity to store your paperclip binary
