@@ -168,7 +168,7 @@ module Paperclip
       def flush_writes
         ActiveRecord::Base.logger.info("[paperclip] Writing files for #{name}")
         @queued_for_write.each do |style, file|
-          paperclip_file = instance.send(@paperclip_files).send(:find_or_create_by_style, style.to_s)
+          paperclip_file = instance.send(@paperclip_files).send(:find_or_create_by, style: style.to_s)
           paperclip_file.file_contents = file.read
           paperclip_file.save!
           instance.reload
