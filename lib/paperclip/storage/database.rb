@@ -98,7 +98,7 @@ module Paperclip
         @database_table = @paperclip_file.table_name
         #FIXME: This fails when using  set_table_name "<myname>" in your model
         #FIXME: This should be fixed in ActiveRecord...
-        instance.class.has_many @paperclip_files, :foreign_key => instance.class.table_name.classify.underscore + '_id'
+        instance.class.has_many @paperclip_files.to_sym, :foreign_key => instance.class.table_name.classify.underscore + '_id'
 
       end
       private :setup_paperclip_files_model
