@@ -81,7 +81,7 @@ module Paperclip
  
       def setup_paperclip_files_model
         #TODO: This fails when your model is in a namespace.
-        @paperclip_files = "#{instance.class.name.underscore}_#{name.to_s}_paperclip_files"
+        @paperclip_files = "#{instance.class.table_name.classify.underscore}_#{name.to_s}_paperclip_files"
         if !Object.const_defined?(@paperclip_files.classify)
           @paperclip_file = Object.const_set(@paperclip_files.classify, Class.new(::ActiveRecord::Base))
           @paperclip_file.table_name = @options[:database_table] || name.to_s.pluralize
