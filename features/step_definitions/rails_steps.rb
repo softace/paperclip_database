@@ -3,6 +3,7 @@ Given /^I generate a new rails application$/ do
     When I successfully run `bundle exec #{new_application_command} #{APP_NAME}`
     And I cd to "#{APP_NAME}"
     And I turn off class caching
+    And I fix the application.rb for 3.0.12
     And I write to "Gemfile" with:
       """
       source "http://rubygems.org"
@@ -16,6 +17,15 @@ Given /^I generate a new rails application$/ do
     And I reset Bundler environment variable
     And I successfully run `bundle install --local`
   }
+end
+
+Given "I fix the application.rb for 3.0.12" do
+  ##See https://github.com/rails/rails/issues/9619
+  in_current_dir do
+    File.open("config/application.rb", "a") do |f|
+      f << "ActionController::Base.config.relative_url_root = ''"
+    end
+  end
 end
 
 Given /^I run a "(.*?)" generator to generate a "(.*?)" scaffold with "(.*?)"$/ do |generator_name, model_name, attributes|
