@@ -35,8 +35,8 @@ module RailsCommandHelpers
     framework_version.split(".").first.to_i
   end
 
-  def new_application_command
-    framework_major_version >= 3 ? "rails new" : "rails"
+  def new_application_command(app_name)
+    framework_major_version >= 3 ? "rails new #{app_name} --skip-sprockets --skip-javascript --skip-bundle" : "rails"
   end
 
   def generator_command

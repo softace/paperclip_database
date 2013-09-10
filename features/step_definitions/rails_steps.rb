@@ -1,6 +1,6 @@
 Given /^I generate a new rails application$/ do
   steps %{
-    When I successfully run `bundle exec #{new_application_command} #{APP_NAME}`
+    When I successfully run `bundle exec #{new_application_command(APP_NAME)}`
     And I cd to "#{APP_NAME}"
     And I turn off class caching
     And I fix the application.rb for 3.0.12
@@ -13,6 +13,8 @@ Given /^I generate a new rails application$/ do
       gem "gherkin"
       gem "paperclip", "#{paperclip_version}"
       """
+    And I remove turbolinks
+    And I empty the application.js file
     And I configure the application to use "paperclip_database" from this project
     And I reset Bundler environment variable
     And I successfully run `bundle install --local`
@@ -24,6 +26,41 @@ Given "I fix the application.rb for 3.0.12" do
   in_current_dir do
     File.open("config/application.rb", "a") do |f|
       f << "ActionController::Base.config.relative_url_root = ''"
+    end
+  end
+end
+
+Given "I allow the attachment to be submitted" do
+  in_current_dir do
+    if framework_major_version == 3
+      transform_file("app/models/user.rb") do |content|
+        content.gsub("attr_accessible :name",
+                     "attr_accessible :name, :attachment")
+      end
+    else
+      transform_file("app/controllers/users_controller.rb") do |content|
+        content.gsub("params.require(:user).permit(:name)",
+                     "params.require(:user).permit!")
+      end
+    end
+  end
+end
+
+Given "I remove turbolinks" do
+  in_current_dir do
+    transform_file("app/assets/javascripts/application.js") do |content|
+      content.gsub("//= require turbolinks", "")
+    end
+    transform_file("app/views/layouts/application.html.erb") do |content|
+      content.gsub(', "data-turbolinks-track" => true', "")
+    end
+  end
+end
+
+Given "I empty the application.js file" do
+  in_current_dir do
+    transform_file("app/assets/javascripts/application.js") do |content|
+      ""
     end
   end
 end
@@ -48,33 +85,18 @@ Given /^I run a migration$/ do
 end
 
 Given /^I update my new user view to include the file upload field$/ do
-  if framework_version?("3")
-    steps %{
-      Given I overwrite "app/views/users/new.html.erb" with:
-        """
-        <%= form_for @user, :html => { :multipart => true } do |f| %>
-          <%= f.label :name %>
-          <%= f.text_field :name %>
-          <%= f.label :attachment %>
-          <%= f.file_field :attachment %>
-          <%= submit_tag "Submit" %>
-        <% end %>
-        """
-    }
-  else
-    steps %{
-      Given I overwrite "app/views/users/new.html.erb" with:
-        """
-        <% form_for @user, :html => { :multipart => true } do |f| %>
-          <%= f.label :name %>
-          <%= f.text_field :name %>
-          <%= f.label :attachment %>
-          <%= f.file_field :attachment %>
-          <%= submit_tag "Submit" %>
-        <% end %>
-        """
-    }
-  end
+  steps %{
+    Given I overwrite "app/views/users/new.html.erb" with:
+      """
+      <%= form_for @user, :html => { :multipart => true } do |f| %>
+        <%= f.label :name %>
+        <%= f.text_field :name %>
+        <%= f.label :attachment %>
+        <%= f.file_field :attachment %>
+        <%= submit_tag "Submit" %>
+      <% end %>
+      """
+  }
 end
 
 Given /^I update my user view to include the attachment$/ do
@@ -206,6 +228,16 @@ module FileHelpers
       gemfile = File.read("Gemfile")
       gemfile.sub!(/^(\s*)(gem\s*['"]#{gemname})/, "\\1# \\2")
       File.open("Gemfile", 'w'){ |file| file.write(gemfile) }
+    end
+  end
+
+  def transform_file(filename)
+    if File.exists?(filename)
+      content = File.read(filename)
+      File.open(filename, "w") do |f|
+        content = yield(content)
+        f.write(content)
+      end
     end
   end
 end
