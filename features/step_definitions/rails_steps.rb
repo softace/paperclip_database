@@ -117,11 +117,11 @@ Given /^I add this snippet to the User model:$/ do |snippet|
   end
 end
 
-Given /^I add this snippet to the "(.*?)" controller:$/ do |controller_name, snippet|
-  file_name = "app/controllers/#{controller_name}_controller.rb"
+Given /^I replace \/(.*?)\/ with this snippet in the "(.*?)" controller:$/ do |pattern, controller_name, snippet|
   in_current_dir do
-    content = File.read(file_name)
-    File.open(file_name, 'w') { |f| f << content.sub(/end\Z/, "#{snippet}\nend") }
+    transform_file("app/controllers/#{controller_name}_controller.rb") do |content|
+      content.gsub(Regexp.new(pattern, Regexp::MULTILINE), snippet)
+    end
   end
 end
 

@@ -18,7 +18,7 @@ Feature: Rails integration
                         :url => '/user_attachment_views/:id?style=:style'
       """
     And I run a "scaffold" generator to generate a "UserAttachmentView" scaffold with ""
-    Given I add this snippet to the "user_attachment_views" controller:
+    Given I replace /^  def show$.*?^  end$/ with this snippet in the "user_attachment_views" controller:
       """
         def show
           style = params[:style] ? params[:style] : 'original'
@@ -28,6 +28,10 @@ Feature: Rails integration
                       :type => record.attachment_content_type
         end
       """
+    Given I replace /before_action :set_user_attachment_view.*?$/ with this snippet in the "user_attachment_views" controller:
+      """
+      """
+
     And I run a "paperclip_database:migration" generator to create storage for paperclip "attachment" to the "User" model
     And I run a migration
     And I start the rails application
