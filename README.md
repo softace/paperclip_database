@@ -26,7 +26,7 @@ should be used in your app.
 
 Include the gem in your Gemfile:
 
-    gem "paperclip_database", "~> 1.0"
+    gem "paperclip_database", "~> 2.0"
 
 Or, if you want to get the latest, you can get master from the main
 paperclip repository:
@@ -39,20 +39,11 @@ to specify the master branch if you want to use them. This README is
 probably ahead of the latest released version, if you're reading it on
 GitHub.
 
-For rails 2 you should add this to snippet to your environment.
-
-    # In config/environment.rb
-    ...
-    Rails::Initializer.run do |config|
-      ...
-      config.gem "paperclip", :version => "~> 2.5"
-      ...
-    end
-
 Supported Versions
 ------------------
 
-Supported version are rails >= 2.3 and paperclip version >= 2.5
+As of version 2.0, Rails 2 is no longer supported.
+Supported version are rails >= 3.0 and paperclip version >= 2.5
 
 Quick Start
 -----------
@@ -77,10 +68,6 @@ In your model:
 
 There is a migration generator that will create a basic migration for
 the extra table.
-
-On the console (rails 2):
-
-    ./script/generate paperclip_database User avatar
 
 On the console (rails 3):
 
