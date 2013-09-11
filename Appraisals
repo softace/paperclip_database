@@ -79,10 +79,15 @@ end
 
 ## Rails 4.0
 
+appraise "rails40_paperclip34" do
+  gem "rails", "~> 4.0.0"
+  gem "paperclip", "~> 3.4.0"
+  gem "paperclip_database", :path => "../"
+end
+
 appraise "rails40_paperclip3x" do
   gem "rails", "~> 4.0.0"
   gem "paperclip", "~> 3.0"
   gem "paperclip_database", :path => "../"
 end
-
 
