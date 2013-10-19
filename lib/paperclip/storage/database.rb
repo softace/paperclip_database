@@ -168,14 +168,14 @@ module Paperclip
       def flush_writes
         ActiveRecord::Base.logger.info("[paperclip] Writing files for #{name}")
         @queued_for_write.each do |style, file|
-            case Rails::VERSION::STRING
-            when /^2/, /^3/
-              paperclip_file = instance.send(@paperclip_files).send(:find_or_create_by_style, style.to_s)
-            when /^4/
-              paperclip_file = instance.send(@paperclip_files).send(:find_or_create_by, style: style.to_s)
-            else # 4.x
-              raise "Rails version #{Rails::VERSION::STRING} is not supported (yet)"
-            end
+            # case Rails::VERSION::STRING
+            # when /^2/, /^3/
+            #   paperclip_file = instance.send(@paperclip_files).send(:find_or_create_by_style, style.to_s)
+            # when /^4/
+            #   paperclip_file = instance.send(@paperclip_files).send(:find_or_create_by, style: style.to_s)
+            # else # 4.x
+            #   raise "Rails version #{Rails::VERSION::STRING} is not supported (yet)"
+            # end
           paperclip_file.file_contents = file.read
           paperclip_file.save!
           instance.reload
