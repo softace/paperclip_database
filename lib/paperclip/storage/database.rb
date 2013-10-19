@@ -86,12 +86,12 @@ module Paperclip
           @paperclip_file = Object.const_set(@paperclip_files.classify, Class.new(::ActiveRecord::Base))
           @paperclip_file.table_name = @options[:database_table] || name.to_s.pluralize
           @paperclip_file.validates_uniqueness_of :style, :scope => instance.class.table_name.classify.underscore + '_id'
-          case Rails::VERSION::STRING
-          when /^2/
-            @paperclip_file.named_scope :file_for, lambda {|style| { :conditions => ['style = ?', style] }}
-          else # 3.x
-            @paperclip_file.scope :file_for, lambda {|style| @paperclip_file.where('style = ?', style) }
-          end
+          #case Rails::VERSION::STRING
+          #when /^2/
+          #  @paperclip_file.named_scope :file_for, lambda {|style| { :conditions => ['style = ?', style] }}
+          #else # 3.x
+          #  @paperclip_file.scope :file_for, lambda {|style| @paperclip_file.where('style = ?', style) }
+          #end
         else
           @paperclip_file = Object.const_get(@paperclip_files.classify)
         end
