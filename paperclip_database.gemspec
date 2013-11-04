@@ -1,3 +1,5 @@
+# -*- ruby -*-
+
 $LOAD_PATH.push File.expand_path("../lib", __FILE__)
 require 'paperclip_database/version'
 
@@ -10,8 +12,7 @@ Gem::Specification.new do |s|
   s.homepage          = "https://github.com/softace/paperclip_database"
   s.summary           = "Database storage for paperclip"
   s.description       = "To have all your data in one place: the database"
-
-  s.rubyforge_project = "paperclip_database"
+  s.license           = 'MIT'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
