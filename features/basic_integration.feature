@@ -22,6 +22,7 @@ Feature: Rails integration
         def show
           style = params[:style] ? params[:style] : 'original'
           record = User.find(params[:id])
+          raise 'Error' unless record.avatar.exists?(style)
           send_data record.avatar.file_contents(style),
                       :filename => record.avatar_file_name,
                       :type => record.avatar_content_type
