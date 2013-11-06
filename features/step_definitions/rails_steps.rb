@@ -35,7 +35,7 @@ Given "I allow the attachment to be submitted" do
     if framework_major_version == 3
       transform_file("app/models/user.rb") do |content|
         content.gsub("attr_accessible :name",
-                     "attr_accessible :name, :attachment")
+                     "attr_accessible :name, :avatar")
       end
     else
       transform_file("app/controllers/users_controller.rb") do |content|
@@ -91,8 +91,8 @@ Given /^I update my new user view to include the file upload field$/ do
       <%= form_for @user, :html => { :multipart => true } do |f| %>
         <%= f.label :name %>
         <%= f.text_field :name %>
-        <%= f.label :attachment %>
-        <%= f.file_field :attachment %>
+        <%= f.label :avatar %>
+        <%= f.file_field :avatar %>
         <%= submit_tag "Submit" %>
       <% end %>
       """
@@ -104,7 +104,7 @@ Given /^I update my user view to include the attachment$/ do
     Given I overwrite "app/views/users/show.html.erb" with:
       """
       <p>Name: <%= @user.name %></p>
-      <p>Attachment: <%= image_tag @user.attachment.url %></p>
+      <p>Avatar: <%= image_tag @user.avatar.url %></p>
       """
   }
 end
