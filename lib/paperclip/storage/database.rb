@@ -80,10 +80,16 @@ module Paperclip
       end
 
       def setup_paperclip_files_model
-        #TODO: This fails when your model is in a namespace.
-        @paperclip_files = "#{instance.class.name.underscore}_#{name.to_s}_paperclip_files"
-        if !Object.const_defined?(@paperclip_files.classify)
-          @paperclip_file = Object.const_set(@paperclip_files.classify, Class.new(::ActiveRecord::Base))
+        # If the model is in a namespace, look up that module
+        if instance.class.name.include?('::')
+          @paperclip_class_module = instance.class.name.deconstantize.safe_constantize || Object
+        else
+          @paperclip_class_module = Object
+        end
+
+        @paperclip_files = "#{instance.class.name.demodulize.underscore}_#{name.to_s}_paperclip_files"
+        if !@paperclip_class_module.const_defined?(@paperclip_files.classify)
+          @paperclip_file = @paperclip_class_module.const_set(@paperclip_files.classify, Class.new(::ActiveRecord::Base))
           @paperclip_file.table_name = @options[:database_table] || name.to_s.pluralize
           @paperclip_file.validates_uniqueness_of :style, :scope => instance.class.table_name.classify.underscore + '_id'
           case Rails::VERSION::STRING
@@ -93,13 +99,12 @@ module Paperclip
             @paperclip_file.scope :file_for, lambda {|style| @paperclip_file.where('style = ?', style) }
           end
         else
-          @paperclip_file = Object.const_get(@paperclip_files.classify)
+          @paperclip_file = @paperclip_class_module.const_get(@paperclip_files.classify)
         end
         @database_table = @paperclip_file.table_name
         #FIXME: This fails when using  set_table_name "<myname>" in your model
         #FIXME: This should be fixed in ActiveRecord...
-        instance.class.has_many @paperclip_files.to_sym, :foreign_key => instance.class.table_name.classify.underscore + '_id'
-
+        instance.class.has_many @paperclip_files.to_sym, :class_name => @paperclip_file.name, :foreign_key => instance.class.table_name.classify.underscore + '_id'
       end
       private :setup_paperclip_files_model
 
