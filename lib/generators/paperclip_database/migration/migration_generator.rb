@@ -24,7 +24,7 @@ module PaperclipDatabase
       protected
 
       def migration_name
-        "create_#{name.underscore}_#{attachment_names.map{|n| n.pluralize}.join('_and_')}"
+        "create_#{name.underscore.tr('/', '_')}_#{attachment_names.map{|n| n.pluralize}.join('_and_')}"
       end
 
       def migration_file_name
