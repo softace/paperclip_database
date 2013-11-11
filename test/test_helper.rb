@@ -14,7 +14,7 @@ ROOT = Pathname(File.expand_path(File.join(File.dirname(__FILE__), '..')))
 
 module Rails
   module RailsVersion
-    STRING = '4.0.0'
+    STRING = Gem.loaded_specs['rails'].version.to_s
   end
   VERSION = RailsVersion
 
@@ -39,7 +39,8 @@ Paperclip.options[:logger] = ActiveRecord::Base.logger
 
 def reset_class class_name
   if class_name.include? '::'
-    class_module = class_name.deconstantize.safe_constantize || Object
+    module_name = PaperclipDatabase::deconstantize(class_name)
+    class_module = module_name.constantize rescue Object
   else
     class_module = Object
   end

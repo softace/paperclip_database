@@ -82,7 +82,8 @@ module Paperclip
       def setup_paperclip_files_model
         # If the model is in a namespace, look up that module
         if instance.class.name.include?('::')
-          @paperclip_class_module = instance.class.name.deconstantize.safe_constantize || Object
+          module_name = PaperclipDatabase::deconstantize(instance.class.name)
+          @paperclip_class_module = module_name.constantize rescue Object
         else
           @paperclip_class_module = Object
         end
