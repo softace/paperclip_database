@@ -1,8 +1,8 @@
 class <%= migration_name %> < ActiveRecord::Migration
   def self.up
 <% attachments.each do |attachment| -%>
-    create_table :<%= name.underscore.camelize.tableize %>_<%= attachment.pluralize %> do |t|
-      t.integer    :<%= name.underscore.camelize.tableize %>_id
+    create_table :<%= name.underscore.camelize.tableize.tr('/', '_') %>_<%= attachment.pluralize %> do |t|
+      t.integer    :<%= name.underscore.camelize.tableize.tr('/', '_') %>_id
       t.string     :style
       t.binary     :file_contents
     end
@@ -11,7 +11,7 @@ class <%= migration_name %> < ActiveRecord::Migration
 
   def self.down
 <% attachments.each do |attachment| -%>
-    drop_table :<%= name.underscore.camelize.tableize %>_<%= attachment.pluralize %>
+    drop_table :<%= name.underscore.camelize.tableize.tr('/', '_') %>_<%= attachment.pluralize %>
 <% end -%>
   end
 end
