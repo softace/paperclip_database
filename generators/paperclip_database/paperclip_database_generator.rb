@@ -19,7 +19,6 @@ class PaperclipDatabaseGenerator < Rails::Generator::NamedBase
   private
 
   def generate_file_name
-    debugger
     names = attachments.map{|a| "#{class_name.underscore.tr('/', '_')}_#{a.pluralize}" }
     names = names[0..-2] + ["and", names[-1]] if names.length > 1
     "create_#{names.join('_')}"
