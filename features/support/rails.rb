@@ -36,24 +36,16 @@ module RailsCommandHelpers
   end
 
   def new_application_command(app_name)
-    framework_major_version >= 3 ? "rails new #{app_name} --skip-sprockets --skip-javascript --skip-bundle" : "rails"
+    "rails new #{app_name} --skip-sprockets --skip-javascript --skip-bundle"
   end
 
   def generator_command
-    framework_major_version >= 3 ? "rails generate" : "script/generate"
+    "rails generate"
   end
 
   def runner_command
-    framework_major_version >= 3 ? "rails runner" : "script/runner"
+    "rails runner"
   end
-
-  def rails2_generator_name(rails3_generator_name)
-    case rails3_generator_name
-    when "paperclip_database:migration" then "paperclip_database"
-    else rails3_generator_name
-    end
-  end
-
 end
 
 module PaperclipGemHelpers

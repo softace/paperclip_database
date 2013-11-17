@@ -74,9 +74,6 @@ Given /^I run a "(.*?)" generator to add a paperclip "(.*?)" to the "(.*?)" mode
 end
 
 Given /^I run a "(.*?)" generator to create storage for paperclip "(.*?)" to the "(.*?)" model$/ do |generator_name, attachment_name, model_name|
-  if framework_version?("2")
-    generator_name = rails2_generator_name(generator_name)
-  end
   step %[I successfully run `bundle exec #{generator_command} #{generator_name} #{model_name} #{attachment_name}`]
 end
 
@@ -143,30 +140,6 @@ When %r{I turn off class caching} do
     config.gsub!(%r{^\s*config.cache_classes.*$},
                  "config.cache_classes = false")
     File.open(file, "w"){|f| f.write(config) }
-  end
-end
-
-Given /^I update my application to use Bundler$/ do
-  if framework_version?("2")
-    boot_config_template = File.read('features/support/fixtures/boot_config.txt')
-    preinitializer_template = File.read('features/support/fixtures/preinitializer.txt')
-    gemfile_template = File.read('features/support/fixtures/gemfile.txt')
-    in_current_dir do
-      content = File.read("config/boot.rb").sub(/Rails\.boot!/, boot_config_template)
-      File.open("config/boot.rb", "w") { |file| file.write(content) }
-      File.open("config/preinitializer.rb", "w") { |file| file.write(preinitializer_template) }
-      File.open("Gemfile", "w") { |file| file.write(gemfile_template.sub(/RAILS_VERSION/, framework_version)) }
-    end
-  end
-end
-
-Given /^I add the paperclip rake task to a Rails 2.3 application$/ do
-  if framework_version?("2.3")
-    require 'fileutils'
-    source = File.expand_path('lib/tasks/paperclip.rake')
-    destination = in_current_dir { File.expand_path("lib/tasks") }
-    FileUtils.cp source, destination
-    append_to "Rakefile", "require 'paperclip'"
   end
 end
 

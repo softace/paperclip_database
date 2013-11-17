@@ -93,12 +93,7 @@ module Paperclip
           @paperclip_file = @paperclip_class_module.const_set(@paperclip_files.classify, Class.new(::ActiveRecord::Base))
           @paperclip_file.table_name = @options[:database_table] || name.to_s.pluralize
           @paperclip_file.validates_uniqueness_of :style, :scope => instance.class.table_name.classify.underscore + '_id'
-          case Rails::VERSION::STRING
-          when /^2/
-            @paperclip_file.named_scope :file_for, lambda {|style| { :conditions => ['style = ?', style] }}
-          else # 3.x
-            @paperclip_file.scope :file_for, lambda {|style| @paperclip_file.where('style = ?', style) }
-          end
+          @paperclip_file.scope :file_for, lambda {|style| @paperclip_file.where('style = ?', style) }
         else
           @paperclip_file = @paperclip_class_module.const_get(@paperclip_files.classify)
         end
@@ -175,11 +170,11 @@ module Paperclip
         ActiveRecord::Base.logger.info("[paperclip] Writing files for #{name}")
         @queued_for_write.each do |style, file|
             case Rails::VERSION::STRING
-            when /^2/, /^3/
+            when /^3/
               paperclip_file = instance.send(@paperclip_files).send(:find_or_create_by_style, style.to_s)
             when /^4/
               paperclip_file = instance.send(@paperclip_files).send(:find_or_create_by, style: style.to_s)
-            else # 4.x
+            else
               raise "Rails version #{Rails::VERSION::STRING} is not supported (yet)"
             end
           paperclip_file.file_contents = file.read
