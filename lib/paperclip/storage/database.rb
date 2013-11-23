@@ -162,7 +162,7 @@ module Paperclip
         db_result.first
       end
 
-      def file_contents(style)
+      def file_contents(style = default_style)
         file_for(style).file_contents
       end
 
