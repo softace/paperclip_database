@@ -15,6 +15,7 @@ Feature: Rails integration
       has_attached_file :avatar,
                         :storage => :database,
                         :url => '/avatar_views/:id?style=:style'
+      validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
       """
     And I run a "scaffold" generator to generate a "AvatarView" scaffold with ""
     Given I replace /^  def show$.*?^  end$/ with this snippet in the "avatar_views" controller:
@@ -42,4 +43,3 @@ Feature: Rails integration
     Then I should see "Name: something"
     And I should see an image with a path of "/avatar_views/1?style=original"
     And the file at "/avatar_views/1?style=original" should be the same as "test/fixtures/5k.png"
-

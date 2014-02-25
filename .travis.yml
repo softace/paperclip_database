@@ -15,5 +15,9 @@ gemfile:
   - gemfiles/rails32_paperclip2x.gemfile
   - gemfiles/rails32_paperclip30.gemfile
   - gemfiles/rails32_paperclip3x.gemfile
+  - gemfiles/rails32_paperclip40.gemfile
+  - gemfiles/rails32_paperclip4x.gemfile
   - gemfiles/rails40_paperclip34.gemfile
   - gemfiles/rails40_paperclip3x.gemfile
+  - gemfiles/rails40_paperclip40.gemfile
+  - gemfiles/rails40_paperclip4x.gemfile

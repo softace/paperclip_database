@@ -77,6 +77,18 @@ appraise "rails32_paperclip3x" do
   gem "paperclip_database", :path => "../"
 end
 
+appraise "rails32_paperclip40" do
+  gem "rails", "~> 3.2.0"
+  gem "paperclip", "~> 4.0.0"
+  gem "paperclip_database", :path => "../"
+end
+
+appraise "rails32_paperclip4x" do
+  gem "rails", "~> 3.2.0"
+  gem "paperclip", "~> 4.0"
+  gem "paperclip_database", :path => "../"
+end
+
 ## Rails 4.0
 
 appraise "rails40_paperclip34" do
@@ -91,3 +103,14 @@ appraise "rails40_paperclip3x" do
   gem "paperclip_database", :path => "../"
 end
 
+appraise "rails40_paperclip40" do
+  gem "rails", "~> 4.0.0"
+  gem "paperclip", "~> 4.0.0"
+  gem "paperclip_database", :path => "../"
+end
+
+appraise "rails40_paperclip4x" do
+  gem "rails", "~> 4.0.0"
+  gem "paperclip", "~> 4.0"
+  gem "paperclip_database", :path => "../"
+end

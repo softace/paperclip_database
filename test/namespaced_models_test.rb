@@ -9,6 +9,7 @@ class NamespacedModelsTest < Test::Unit::TestCase
       klass.table_name = 'namespace_models'
       klass.has_attached_file :avatar, :storage => :database,
                                        :database_table => :namespace_model_avatars
+      klass.validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
     end
 
     ActiveRecord::Base.connection.create_table :namespace_models, :force => true do |table|
