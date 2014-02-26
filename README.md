@@ -1,7 +1,7 @@
 Paperclip Database Storage
 ==========================
 
-[![Build Status](https://secure.travis-ci.org/softace/paperclip_database.png)](http://travis-ci.org/softace/paperclip_database)
+[![Build Status](https://travis-ci.org/softace/paperclip_database.png)](http://travis-ci.org/softace/paperclip_database)
 [![Dependency Status](https://gemnasium.com/softace/paperclip_database.png)](https://gemnasium.com/softace/paperclip_database)
 [![Code Climate](https://codeclimate.com/github/softace/paperclip_database.png)](https://codeclimate.com/github/softace/paperclip_database)
 
@@ -32,7 +32,7 @@ Or, if you want to get the latest, you can get master from the main
 paperclip repository:
 
     gem "paperclip_database", :git => "git://github.com/softace/paperclip_database.git"
-    
+
 If you're trying to use features that don't seem to be in the latest
 released gem, but are mentioned in this README, then you probably need
 to specify the master branch if you want to use them. This README is
@@ -61,7 +61,7 @@ table.
 In your model:
 
     class User < ActiveRecord::Base
-      has_attached_file :avatar, 
+      has_attached_file :avatar,
                         :storage => :database ## This is the essence
                         :styles => { :medium => "300x300>", :thumb => "100x100>" }
     end
@@ -117,4 +117,3 @@ Copyright
 
 Copyright (c) 2012 Jarl Friis. See LICENSE.txt for
 further details.
-
