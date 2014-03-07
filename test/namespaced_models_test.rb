@@ -36,12 +36,12 @@ class NamespacedModelsTest < Test::Unit::TestCase
     assert_equal(Namespace, @model.avatar.instance_variable_get(:@paperclip_class_module))
   end
 
-  def test_class_name_inference
-    assert_equal('model_avatar_paperclip_files', @model.avatar.instance_variable_get(:@paperclip_files))
+  def test_association_name
+    assert_equal('model_avatar_paperclip_files', @model.avatar.instance_variable_get(:@paperclip_files_association_name))
   end
 
-  def test_class_inference
-    assert_equal(Namespace::ModelAvatarPaperclipFile, @model.avatar.instance_variable_get(:@paperclip_file))
+  def test_model_constant
+    assert_equal(Namespace::ModelAvatarPaperclipFile, @model.avatar.instance_variable_get(:@paperclip_file_model))
   end
 
   def test_table_name

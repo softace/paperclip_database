@@ -58,7 +58,9 @@ module Paperclip
 
       def self.extended(base)
         base.instance_eval do
-          setup_paperclip_files_model
+          setup_paperclip_class_module
+          setup_paperclip_file_model
+          setup_paperclip_files_association
           override_default_options base
         end
         Paperclip.interpolates(:database_path) do |attachment, style|
@@ -79,7 +81,32 @@ module Paperclip
         ActiveRecord::Base.logger.info("[paperclip] Database Storage Initalized.")
       end
 
-      def setup_paperclip_files_model
+      def setup_paperclip_files_association
+        @paperclip_files_association_name = @paperclip_file_model.name.demodulize.tableize
+        @database_table = @paperclip_file_model.table_name
+        #FIXME: This fails when using  set_table_name "<myname>" in your model
+        #FIXME: This should be fixed in ActiveRecord...
+        instance.class.has_many(@paperclip_files_association_name.to_sym,
+                                :class_name => @paperclip_file_model.name,
+                                :foreign_key => instance.class.table_name.classify.underscore + '_id'
+                                )
+      end
+      private :setup_paperclip_files_association
+
+      def setup_paperclip_file_model
+        class_name = "#{instance.class.name.demodulize.underscore}_#{name.to_s}_paperclip_file".classify
+        if @paperclip_class_module.const_defined?(class_name)
+          @paperclip_file_model = @paperclip_class_module.const_get(class_name)
+        else
+          @paperclip_file_model = @paperclip_class_module.const_set(class_name, Class.new(::ActiveRecord::Base))
+          @paperclip_file_model.table_name = @options[:database_table] || name.to_s.pluralize
+          @paperclip_file_model.validates_uniqueness_of :style, :scope => instance.class.table_name.classify.underscore + '_id'
+          @paperclip_file_model.scope :file_for, lambda {|style| @paperclip_file_model.where('style = ?', style) }
+        end
+      end
+      private :setup_paperclip_file_model
+
+      def setup_paperclip_class_module
         # If the model is in a namespace, look up that module
         if instance.class.name.include?('::')
           module_name = PaperclipDatabase::deconstantize(instance.class.name)
@@ -87,22 +114,8 @@ module Paperclip
         else
           @paperclip_class_module = Object
         end
-
-        @paperclip_files = "#{instance.class.name.demodulize.underscore}_#{name.to_s}_paperclip_files"
-        if !@paperclip_class_module.const_defined?(@paperclip_files.classify)
-          @paperclip_file = @paperclip_class_module.const_set(@paperclip_files.classify, Class.new(::ActiveRecord::Base))
-          @paperclip_file.table_name = @options[:database_table] || name.to_s.pluralize
-          @paperclip_file.validates_uniqueness_of :style, :scope => instance.class.table_name.classify.underscore + '_id'
-          @paperclip_file.scope :file_for, lambda {|style| @paperclip_file.where('style = ?', style) }
-        else
-          @paperclip_file = @paperclip_class_module.const_get(@paperclip_files.classify)
-        end
-        @database_table = @paperclip_file.table_name
-        #FIXME: This fails when using  set_table_name "<myname>" in your model
-        #FIXME: This should be fixed in ActiveRecord...
-        instance.class.has_many @paperclip_files.to_sym, :class_name => @paperclip_file.name, :foreign_key => instance.class.table_name.classify.underscore + '_id'
       end
-      private :setup_paperclip_files_model
+      private :setup_paperclip_class_module
 
       def copy_to_local_file(style, dest_path)
         File.open(dest_path, 'wb+'){|df| to_file(style).tap{|sf| File.copy_stream(sf, df); sf.close;sf.unlink} }
@@ -131,7 +144,7 @@ module Paperclip
 
       def exists?(style = default_style)
         if original_filename
-          instance.send("#{@paperclip_files}").where(:style => style).exists?
+          instance.send("#{@paperclip_files_association_name}").where(:style => style).exists?
         else
           false
         end
@@ -157,7 +170,7 @@ module Paperclip
       alias_method :to_io, :to_file
 
       def file_for(style)
-        db_result = instance.send("#{@paperclip_files}").send(:file_for, style.to_s)
+        db_result = instance.send("#{@paperclip_files_association_name}").send(:file_for, style.to_s)
         raise RuntimeError, "More than one result for #{style}" if db_result.size > 1
         db_result.first
       end
@@ -171,9 +184,9 @@ module Paperclip
         @queued_for_write.each do |style, file|
             case Rails::VERSION::STRING
             when /^3/
-              paperclip_file = instance.send(@paperclip_files).send(:find_or_create_by_style, style.to_s)
+              paperclip_file = instance.send(@paperclip_files_association_name).send(:find_or_create_by_style, style.to_s)
             when /^4/
-              paperclip_file = instance.send(@paperclip_files).send(:find_or_create_by, style: style.to_s)
+              paperclip_file = instance.send(@paperclip_files_association_name).send(:find_or_create_by, style: style.to_s)
             else
               raise "Rails version #{Rails::VERSION::STRING} is not supported (yet)"
             end
@@ -190,9 +203,9 @@ module Paperclip
         @queued_for_delete.each do |path|
           /id=([0-9]+)/.match(path)
           if @options[:cascade_deletion] && !instance.class.exists?(instance.id)
-            raise RuntimeError, "Deletion has not been done by through cascading." if @paperclip_file.exists?($1)
+            raise RuntimeError, "Deletion has not been done by through cascading." if @paperclip_file_model.exists?($1)
           else
-            @paperclip_file.destroy $1
+            @paperclip_file_model.destroy $1
           end
         end
         @queued_for_delete = []
