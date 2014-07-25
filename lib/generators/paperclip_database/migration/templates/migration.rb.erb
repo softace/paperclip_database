@@ -7,6 +7,8 @@ class <%= migration_class_name %> < ActiveRecord::Migration
     create_table :<%= (module_names +[attachment.pluralize]).join("_") %> do |t|
       t.integer    :<%= class_name.underscore.tr('/', '_') %>_id
       t.string     :style
+      t.string     :content_type
+      t.string     :file_name
       t.binary     :file_contents
     end
 <% end -%>

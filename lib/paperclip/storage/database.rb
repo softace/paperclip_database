@@ -191,6 +191,8 @@ module Paperclip
               raise "Rails version #{Rails::VERSION::STRING} is not supported (yet)"
             end
           paperclip_file.file_contents = file.read
+          paperclip_file.file_name = file.original_filename
+          paperclip_file.content_type = file.content_type
           paperclip_file.save!
           instance.reload
         end
