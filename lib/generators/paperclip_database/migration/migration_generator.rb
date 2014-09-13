@@ -21,8 +21,6 @@ module PaperclipDatabase
         migration_template "migration.rb.erb", "db/migrate/#{migration_file_name}"
       end
 
-      protected
-
       def migration_name
         "create_#{name.underscore.tr('/', '_')}_#{attachment_names.map{|n| n.pluralize}.join('_and_')}"
       end

@@ -11,8 +11,10 @@ task :all do |t|
   if ENV['BUNDLE_GEMFILE']
     exec('rake test cucumber')
   else
+    exec("rm gemfiles/*.lock")
+    Rake::Task["appraisal:gemfiles"].execute
     Rake::Task["appraisal:install"].execute
-    exec('rake appraisal test cucumber')
+    exec('rake appraisal')
   end
 end
 
