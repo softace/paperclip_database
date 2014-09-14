@@ -93,12 +93,28 @@ end
 
 appraise "rails40_paperclip42" do
   gem "rails", "~> 4.0.0"
+  gem "minitest", "~> 4.2"
   gem "paperclip", "~> 4.2.0"
   gem "paperclip_database", :path => "../"
 end
 
 appraise "rails40_paperclip4x" do
   gem "rails", "~> 4.0.0"
-  gem "paperclip", "~> 4.0"
+  gem "minitest", "~> 4.2"
+  gem "paperclip", "~> 4.2"
+  gem "paperclip_database", :path => "../"
+end
+
+## Rails 4.1
+
+appraise "rails41_paperclip42" do
+  gem "rails", "~> 4.1.0"
+  gem "paperclip", "~> 4.2.0"
+  gem "paperclip_database", :path => "../"
+end
+
+appraise "rails41_paperclip4x" do
+  gem "rails", "~> 4.1.0"
+  gem "paperclip", "~> 4.2"
   gem "paperclip_database", :path => "../"
 end

@@ -3,7 +3,7 @@ require File.expand_path("../test_helper", __FILE__)
 module Namespace
 end
 
-class NamespacedModelsTest < Test::Unit::TestCase
+class NamespacedModelsTest < (Rails::VERSION::STRING[0..2] == "4.0" ? MiniTest::Unit::TestCase : Minitest::Test)
   def setup
     reset_class("Namespace::Model").tap do |klass|
       klass.table_name = 'namespace_models'

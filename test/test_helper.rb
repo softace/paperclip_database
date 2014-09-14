@@ -1,7 +1,11 @@
 require 'rubygems'
 require 'tempfile'
 require 'pathname'
-require 'test/unit'
+if Gem.loaded_specs['rails'].version.to_s[0..2] == "4.0"
+  require 'minitest/unit'
+else
+  require 'minitest/test'
+end
 require 'active_record'
 require 'active_record/version'
 require 'active_support'
@@ -21,7 +25,7 @@ module Rails
   def root
     Pathname.new(ROOT).join('tmp')
   end
-  def env
+  def self.env
     'test'
   end
 end
