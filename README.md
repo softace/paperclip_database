@@ -2,6 +2,7 @@ Paperclip Database Storage
 ==========================
 
 [![Build Status](https://travis-ci.org/softace/paperclip_database.png)](http://travis-ci.org/softace/paperclip_database)
+[![Gem Version](https://badge.fury.io/rb/paperclip_database.svg)](http://badge.fury.io/rb/paperclip_database)
 [![Dependency Status](https://gemnasium.com/softace/paperclip_database.png)](https://gemnasium.com/softace/paperclip_database)
 [![Code Climate](https://codeclimate.com/github/softace/paperclip_database.png)](https://codeclimate.com/github/softace/paperclip_database)
 
