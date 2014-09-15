@@ -7,7 +7,7 @@ Paperclip Database Storage
 [![Code Climate](https://codeclimate.com/github/softace/paperclip_database.png)](https://codeclimate.com/github/softace/paperclip_database)
 
 Paperclip Database Storage is an additional storage option for
-Paperclip. It give you the opportunity to store your paperclip binary
+Paperclip. It gives you the opportunity to store your paperclip binary
 file uploads in the database along with all your other data.
 
 Requirements
