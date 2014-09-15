@@ -21,11 +21,11 @@ Gem::Specification.new do |s|
 
   s.requirements << "ImageMagick"
 
-  s.add_dependency('rails', '>= 3.0.0')
   s.add_dependency('paperclip', '>= 2.3.0')
 
   s.add_development_dependency('minitest', '~> 5.1')
   s.add_development_dependency('appraisal', '~> 1.0')
+#  s.add_development_dependency('rails', '>= 3.0.0') # Appraisal
   s.add_development_dependency('mocha')
   s.add_development_dependency('sqlite3', '~> 1.3')
   s.add_development_dependency('cucumber', '~> 1.1')

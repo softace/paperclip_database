@@ -182,13 +182,13 @@ module Paperclip
       def flush_writes
         ActiveRecord::Base.logger.info("[paperclip] Writing files for #{name}")
         @queued_for_write.each do |style, file|
-            case Rails::VERSION::STRING
-            when /^3/
+            case ActiveModel::VERSION::MAJOR
+            when 3
               paperclip_file = instance.send(@paperclip_files_association_name).send(:find_or_create_by_style, style.to_s)
-            when /^4/
+            when 4
               paperclip_file = instance.send(@paperclip_files_association_name).send(:find_or_create_by, style: style.to_s)
             else
-              raise "Rails version #{Rails::VERSION::STRING} is not supported (yet)"
+              raise "ActiveModel version #{ActiveModel::VERSION::STRING} is not supported (yet)"
             end
           paperclip_file.file_contents = file.read
           paperclip_file.save!
