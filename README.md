@@ -94,9 +94,10 @@ To start develop, please download the source code
 When downloaded, you can start issuing the commands like
 
     bundle install
-    bundle exec rake appraisal:gemfiles
-    bundle exec rake appraisal:install
-    bundle exec rake all
+    bundle exec appraisal clean
+    bundle exec appraisal generate
+    bundle exec appraisal install
+    bundle exec appraisal rake
 
 Or you can see what other options are there:
 
