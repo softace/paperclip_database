@@ -1,6 +1,6 @@
 require 'bundler/gem_tasks'
 require 'appraisal'
-require 'rake/testtask'
+require 'rspec/core/rake_task'
 require 'cucumber/rake/task'
 
 desc 'Default: clean, appraisal:install, all.'
@@ -9,7 +9,7 @@ task :default => [:clean, :all]
 desc 'Test the paperclip_database plugin under all supported Rails versions.'
 task :all do |t|
   if ENV['BUNDLE_GEMFILE']
-    exec('rake test cucumber')
+    exec('rake spec cucumber')
   else
     exec("rm gemfiles/*.lock")
     Rake::Task["appraisal:gemfiles"].execute
@@ -19,11 +19,7 @@ task :all do |t|
 end
 
 desc 'Test the paperclip_database plugin.'
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'lib' << 'profile'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = true
-end
+RSpec::Core::RakeTask.new(:spec)
 
 desc 'Run integration test'
 Cucumber::Rake::Task.new do |t|
@@ -42,7 +38,5 @@ task :clean do |t|
   FileUtils.rm_rf "tmp"
   FileUtils.rm_rf "pkg"
   FileUtils.rm_rf "public"
-  FileUtils.rm "test/debug.log" rescue nil
-  FileUtils.rm "test/paperclip_database.db" rescue nil
   Dir.glob("paperclip_database-*.gem").each{|f| FileUtils.rm f }
 end

@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.license           = 'MIT'
 
   s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  s.test_files    = `git ls-files -- {spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency('paperclip', '>= 2.3.0')
 
-  s.add_development_dependency('minitest', '~> 5.1')
+  s.add_development_dependency('rspec', '~> 3.1')
   s.add_development_dependency('appraisal', '~> 1.0')
 #  s.add_development_dependency('rails', '>= 3.0.0') # Appraisal
   s.add_development_dependency('mocha')
