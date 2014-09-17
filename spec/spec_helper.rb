@@ -21,6 +21,15 @@ RSpec.configure do |config|
 
 end
 
+def reset_activerecord
+  if Gem::Version.new(::ActiveModel::VERSION::STRING) < Gem::Version.new('3.1.0')
+    ActiveRecord::Base.descendants.each do |model|
+      model.reset_column_information
+    end
+  else
+    ActiveRecord::Base.clear_cache!
+  end
+end
 
 def reset_class class_name
   if class_name.include? '::'
@@ -39,9 +48,6 @@ def reset_class class_name
     include Paperclip::Glue
   end
 
-  klass.reset_column_information
-  klass.connection_pool.clear_table_cache!(klass.table_name) if klass.connection_pool.respond_to?(:clear_table_cache!)
-  klass.connection.schema_cache.clear_table_cache!(klass.table_name) if klass.connection.respond_to?(:schema_cache)
   klass
 end
 

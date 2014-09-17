@@ -36,7 +36,7 @@ describe "PaperclipDatabase" do
     after(:each) do
       ActiveRecord::Base.connection.drop_table :users
       ActiveRecord::Base.connection.drop_table :avatars
-      ActiveRecord::Base.clear_cache!
+      reset_activerecord
     end
 
     it "has backward compatible table name" do
@@ -91,7 +91,7 @@ describe "PaperclipDatabase" do
       after(:each) do
         ActiveRecord::Base.connection.drop_table :users
         ActiveRecord::Base.connection.drop_table :avatars
-        ActiveRecord::Base.clear_cache!
+        reset_activerecord
       end
 
       it "has backward compatible table name" do

@@ -36,7 +36,7 @@ describe "PaperclipDatabase" do
     after(:each) do
       ActiveRecord::Base.connection.drop_table :namespace_models
       ActiveRecord::Base.connection.drop_table :namespace_model_avatars
-      ActiveRecord::Base.clear_cache!
+      reset_activerecord
     end
 
     it "detects namespace" do
