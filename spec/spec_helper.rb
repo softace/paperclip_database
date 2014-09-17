@@ -5,6 +5,7 @@ require 'paperclip_database'
 require 'active_record'
 require 'active_support'
 require 'active_support/core_ext'
+require 'yaml'
 
 config = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + "/debug.log")

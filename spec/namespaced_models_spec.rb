@@ -33,6 +33,11 @@ describe "PaperclipDatabase" do
       @model.save
 
     end
+    after(:each) do
+      ActiveRecord::Base.connection.drop_table :namespace_models
+      ActiveRecord::Base.connection.drop_table :namespace_model_avatars
+      ActiveRecord::Base.clear_cache!
+    end
 
     it "detects namespace" do
       expect(@model.avatar.instance_variable_get(:@paperclip_class_module)).to eq Namespace

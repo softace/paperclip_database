@@ -6,11 +6,6 @@ end
 describe "PaperclipDatabase" do
   describe "default options" do
     before(:each) do
-      reset_class("User").tap do |klass|
-        klass.has_attached_file :avatar, :storage => :database
-        klass.validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
-      end
-
       ActiveRecord::Base.connection.create_table :users, :force => true do |table|
         table.column :avatar_file_name, :string
         table.column :avatar_content_type, :string
@@ -24,6 +19,12 @@ describe "PaperclipDatabase" do
         table.column :file_contents, :binary
       end
 
+      Object.send(:remove_const, "UserAvatarPaperclipFile") rescue nil
+      reset_class("User").tap do |klass|
+        klass.has_attached_file :avatar, :storage => :database
+        klass.validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
+      end
+
       @model = User.new
       file = File.open(fixture_file('5k.png'))
 
@@ -35,6 +36,7 @@ describe "PaperclipDatabase" do
     after(:each) do
       ActiveRecord::Base.connection.drop_table :users
       ActiveRecord::Base.connection.drop_table :avatars
+      ActiveRecord::Base.clear_cache!
     end
 
     it "has backward compatible table name" do
@@ -60,11 +62,6 @@ describe "PaperclipDatabase" do
   describe "Namespaced model" do
     describe "default options" do
       before(:each) do
-        reset_class("Namespace::User").tap do |klass|
-          klass.has_attached_file :avatar, :storage => :database
-          klass.validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
-        end
-
         ActiveRecord::Base.connection.create_table :users, :force => true do |table|
           table.column :avatar_file_name, :string
           table.column :avatar_content_type, :string
@@ -78,6 +75,12 @@ describe "PaperclipDatabase" do
           table.column :file_contents, :binary
         end
 
+        Namespace.send(:remove_const, :"UserAvatarPaperclipFile") rescue nil
+        reset_class("Namespace::User").tap do |klass|
+          klass.has_attached_file :avatar, :storage => :database
+          klass.validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
+        end
+
         @model = Namespace::User.new
         file = File.open(fixture_file('5k.png'))
 
@@ -85,10 +88,11 @@ describe "PaperclipDatabase" do
         @model.save
 
       end
-    after(:each) do
-      ActiveRecord::Base.connection.drop_table :users
-      ActiveRecord::Base.connection.drop_table :avatars
-    end
+      after(:each) do
+        ActiveRecord::Base.connection.drop_table :users
+        ActiveRecord::Base.connection.drop_table :avatars
+        ActiveRecord::Base.clear_cache!
+      end
 
       it "has backward compatible table name" do
         expect(@model.avatar.instance_variable_get(:@database_table)).to eq 'avatars'
@@ -103,7 +107,7 @@ describe "PaperclipDatabase" do
       end
 
       it "has model constant" do
-        expect(@model.avatar.instance_variable_get(:@paperclip_file_model).to_s).to eq 'UserAvatarPaperclipFile'
+        expect(@model.avatar.instance_variable_get(:@paperclip_file_model).to_s).to eq 'Namespace::UserAvatarPaperclipFile'
       end
 
       it "has association" do

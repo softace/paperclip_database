@@ -95,8 +95,8 @@ module Paperclip
 
       def setup_paperclip_file_model
         class_name = "#{instance.class.name.demodulize.underscore}_#{name.to_s}_paperclip_file".classify
-        if @paperclip_class_module.const_defined?(class_name)
-          @paperclip_file_model = @paperclip_class_module.const_get(class_name)
+        if @paperclip_class_module.const_defined?(class_name, false)
+          @paperclip_file_model = @paperclip_class_module.const_get(class_name, false)
         else
           @paperclip_file_model = @paperclip_class_module.const_set(class_name, Class.new(::ActiveRecord::Base))
           @paperclip_file_model.table_name = @options[:database_table] || name.to_s.pluralize
@@ -217,7 +217,8 @@ module Paperclip
         end
         def downloads_files_for(model, attachment, options = {})
           define_method("#{attachment.to_s.pluralize}") do
-            model_record = Object.const_get(model.to_s.camelize.to_sym).find(params[:id])
+            #FIXME: Handling Namespaces
+            model_record = Object.const_get(model.to_s.camelize.to_sym, false).find(params[:id])
             style = params[:style] ? params[:style] : 'original'
             send_data model_record.send(attachment).file_contents(style),
                       :filename => model_record.send("#{attachment}_file_name".to_sym),
