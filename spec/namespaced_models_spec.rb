@@ -25,11 +25,11 @@ describe "PaperclipDatabase" do
     end
 
     it "has correct association name" do
-      expect(@model.avatar.instance_variable_get(:@paperclip_files_association_name)).to eq 'model_avatar_paperclip_files'
+      expect(@model.avatar.instance_variable_get(:@paperclip_files_association_name)).to eq 'paperclip_files'
     end
 
     it "has correct model constant" do
-      expect(@model.avatar.instance_variable_get(:@paperclip_file_model)).to eq Namespace::ModelAvatarPaperclipFile
+      expect(@model.avatar.instance_variable_get(:@paperclip_file_model).to_s).to eq 'Namespace::NamespaceModelAvatarPaperclipFile'
     end
 
     it "has correct table name" do
@@ -37,7 +37,7 @@ describe "PaperclipDatabase" do
     end
 
     it "has association" do
-      expect(@model.methods.include?(:model_avatar_paperclip_files)).to be_truthy
+      expect(@model.methods.include?(:paperclip_files)).to be_truthy
     end
   end
 end

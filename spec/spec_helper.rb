@@ -72,9 +72,12 @@ def reset_class class_name, attachment_name
   class_name = class_name.demodulize
 
   ActiveRecord::Base.send(:include, Paperclip::Glue)
-
-  class_module.send(:remove_const, "#{class_name}#{attachment_name.to_s.classify}PaperclipFile") rescue nil
-  class_module.send(:remove_const, class_name) rescue nil
+  if class_module.const_defined?(class_name)
+    old_klass = class_module.const_get(class_name)
+    paperclip_class_name = "#{old_klass.table_name.singularize}_#{attachment_name.to_s}_paperclip_file".classify
+    class_module.send(:remove_const, paperclip_class_name) rescue nil
+    class_module.send(:remove_const, class_name) rescue nil
+  end
   klass = class_module.const_set(class_name, Class.new(ActiveRecord::Base))
 
   klass.class_eval do

@@ -82,7 +82,7 @@ module Paperclip
       end
 
       def setup_paperclip_files_association
-        @paperclip_files_association_name = @paperclip_file_model.name.demodulize.tableize
+        @paperclip_files_association_name = 'paperclip_files'
         @database_table = @paperclip_file_model.table_name
         #FIXME: This fails when using  set_table_name "<myname>" in your model
         #FIXME: This should be fixed in ActiveRecord...
@@ -94,7 +94,7 @@ module Paperclip
       private :setup_paperclip_files_association
 
       def setup_paperclip_file_model
-        class_name = "#{instance.class.name.demodulize.underscore}_#{name.to_s}_paperclip_file".classify
+        class_name = "#{instance.class.table_name.singularize}_#{name.to_s}_paperclip_file".classify
         if @paperclip_class_module.const_defined?(class_name, false)
           @paperclip_file_model = @paperclip_class_module.const_get(class_name, false)
         else
