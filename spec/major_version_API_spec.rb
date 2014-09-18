@@ -19,73 +19,46 @@ end
 
 describe "PaperclipDatabase" do
   describe "backward compatibility" do
-    describe "with default options" do
-      before(:context) do
-        create_model_tables :users, :avatars
-        build_model 'User', nil, :avatar, {}
-        reset_activerecord
-        @model = User.new
-        file = File.open(fixture_file('5k.png'))
+    before(:example) do
+      @model_table_name = defined?(model_table_name) ? model_table_name : model_name.tableize
+      @attachment_table_name = defined?(attachment_table_name) ? attachment_table_name : attachment_name.tableize
+      extra_paperclip_options = defined?(attachment_table_name)? {:database_table => :custom_avatars} : {}
+      create_model_tables @model_table_name, @attachment_table_name, attachment_name
+      build_model model_name, (defined?(model_table_name)? model_table_name: nil), attachment_name.to_sym, extra_paperclip_options
+      @model = model_name.constantize.new
+      file = File.open(fixture_file('5k.png'))
 
-        @model.avatar = file
-        @model.save
-      end
-      subject(:association){@model.avatar}
-      after(:context) do
-        reset_activerecord
-        reset_database :users, :avatars
-      end
+      @model.send(:"#{attachment_name}=",file)
+      @model.save
+    end
+    subject(:association){@model.avatar}
+    after(:example) do
+      reset_activerecord
+      reset_database @model_table_name, @attachment_table_name
+    end
+
+    describe "with default options" do
+      let!(:model_name){'User'}
+      let!(:attachment_name){'avatar'}
       it_behaves_like "major version API compatible", :table_name => 'avatars'
     end
     describe "with custom model table_name" do
-      before(:context) do
-        create_model_tables :custom_users, :avatars
-        build_model 'CUser', 'custom_users', :avatar, {}
-        @model = CUser.new
-        file = File.open(fixture_file('5k.png'))
-
-        @model.avatar = file
-        @model.save
-      end
-      subject(:association){@model.avatar}
-      after(:context) do
-        reset_activerecord
-        reset_database :custom_users, :avatars
-      end
+      let(:model_name){'CUser'}
+      let(:model_table_name){'custom_users'}
+      let(:attachment_name){'avatar'}
       it_behaves_like "major version API compatible", :table_name => 'avatars'
     end
     describe "with custom attachment table_name" do
-      before(:context) do
-        create_model_tables :a_users, :custom_avatars, 'avatar'
-        build_model 'AUser', nil, :avatar, {:database_table => :custom_avatars}
-        @model = AUser.new
-        file = File.open(fixture_file('5k.png'))
-
-        @model.avatar = file
-        @model.save
-      end
-      subject(:association){@model.avatar}
-      after(:context) do
-        reset_activerecord
-        reset_database :a_users, :custom_avatars
-      end
+      let(:model_name){'AUser'}
+      let(:attachment_name){'avatar'}
+      let(:attachment_table_name){'custom_avatars'}
       it_behaves_like "major version API compatible", :table_name => 'custom_avatars'
     end
     describe "with custom model table_name and attachment table_name" do
-      before(:context) do
-        create_model_tables :custom_users, :custom_avatars, 'avatar'
-        build_model 'CaUser', 'custom_users', :avatar, {:database_table => :custom_avatars}
-        @model = CaUser.new
-        file = File.open(fixture_file('5k.png'))
-
-        @model.avatar = file
-        @model.save
-      end
-      subject(:association){@model.avatar}
-      after(:context) do
-        reset_activerecord
-        reset_database :custom_users, :custom_avatars
-      end
+      let(:model_name){'CaUser'}
+      let(:model_table_name){'custom_users'}
+      let(:attachment_name){'avatar'}
+      let(:attachment_table_name){'custom_avatars'}
       it_behaves_like "major version API compatible", :table_name => 'custom_avatars'
     end
   end
