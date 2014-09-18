@@ -37,14 +37,14 @@ def reset_database(*tables)
   end
 end
 
-def create_model_tables(model_table_name, attachment_table_name)
-  single_attachment = attachment_table_name.to_s.singularize
+def create_model_tables(model_table_name, attachment_table_name, association_name = nil)
+  association_name ||= attachment_table_name.to_s.singularize
   ActiveRecord::Base.connection.create_table model_table_name, :force => true do |table|
-    table.column :"#{single_attachment}_file_name", :string
-    table.column :"#{single_attachment}_content_type", :string
-    table.column :"#{single_attachment}_file_size", :integer
-    table.column :"#{single_attachment}_updated_at", :datetime
-    table.column :"#{single_attachment}_fingerprint", :string
+    table.column :"#{association_name}_file_name", :string
+    table.column :"#{association_name}_content_type", :string
+    table.column :"#{association_name}_file_size", :integer
+    table.column :"#{association_name}_updated_at", :datetime
+    table.column :"#{association_name}_fingerprint", :string
   end
   single_model = model_table_name.to_s.singularize
   ActiveRecord::Base.connection.create_table attachment_table_name, :force => true do |table|

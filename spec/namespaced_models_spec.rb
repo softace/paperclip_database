@@ -5,26 +5,9 @@ end
 
 describe "PaperclipDatabase" do
   describe "Namespaced model" do
-    before(:each) do
-      reset_class("Namespace::Model", :avatar).tap do |klass|
-        klass.table_name = 'namespace_models'
-        klass.has_attached_file :avatar, :storage => :database,
-        :database_table => :namespace_model_avatars
-        klass.validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
-      end
-
-      ActiveRecord::Base.connection.create_table :namespace_models, :force => true do |table|
-        table.column :avatar_file_name, :string
-        table.column :avatar_content_type, :string
-        table.column :avatar_file_size, :integer
-        table.column :avatar_updated_at, :datetime
-        table.column :avatar_fingerprint, :string
-      end
-      ActiveRecord::Base.connection.create_table :namespace_model_avatars, :force => true do |table|
-        table.column :namespace_model_id, :integer
-        table.column :style, :string
-        table.column :file_contents, :binary
-      end
+    before(:context) do
+      create_model_tables :namespace_models, :namespace_model_avatars, 'avatar'
+      build_model 'Namespace::Model', 'namespace_models', :avatar, {:database_table => :namespace_model_avatars}
 
       @model = Namespace::Model.new
       file = File.open(fixture_file('5k.png'))
@@ -33,10 +16,9 @@ describe "PaperclipDatabase" do
       @model.save
 
     end
-    after(:each) do
-      ActiveRecord::Base.connection.drop_table :namespace_models
-      ActiveRecord::Base.connection.drop_table :namespace_model_avatars
+    after(:context) do
       reset_activerecord
+      reset_database :namespace_models, :namespace_model_avatars
     end
 
     it "detects namespace" do

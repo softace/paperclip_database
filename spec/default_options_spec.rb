@@ -5,24 +5,9 @@ end
 
 describe "PaperclipDatabase" do
   describe "default options" do
-    before(:each) do
-      ActiveRecord::Base.connection.create_table :users, :force => true do |table|
-        table.column :avatar_file_name, :string
-        table.column :avatar_content_type, :string
-        table.column :avatar_file_size, :integer
-        table.column :avatar_updated_at, :datetime
-        table.column :avatar_fingerprint, :string
-      end
-      ActiveRecord::Base.connection.create_table :avatars, :force => true do |table|
-        table.column :user_id, :integer
-        table.column :style, :string
-        table.column :file_contents, :binary
-      end
-
-      reset_class("User", :avatar).tap do |klass|
-        klass.has_attached_file :avatar, :storage => :database
-        klass.validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
-      end
+    before(:context) do
+      create_model_tables :users, :avatars
+      build_model 'User', nil, :avatar, {}
 
       @model = User.new
       file = File.open(fixture_file('5k.png'))
@@ -32,10 +17,9 @@ describe "PaperclipDatabase" do
 
     end
 
-    after(:each) do
-      ActiveRecord::Base.connection.drop_table :users
-      ActiveRecord::Base.connection.drop_table :avatars
+    after(:context) do
       reset_activerecord
+      reset_database :users, :avatars
     end
 
     it "has backward compatible table name" do
@@ -60,36 +44,19 @@ describe "PaperclipDatabase" do
   end
   describe "Namespaced model" do
     describe "default options" do
-      before(:each) do
-        ActiveRecord::Base.connection.create_table :users, :force => true do |table|
-          table.column :avatar_file_name, :string
-          table.column :avatar_content_type, :string
-          table.column :avatar_file_size, :integer
-          table.column :avatar_updated_at, :datetime
-          table.column :avatar_fingerprint, :string
-        end
-        ActiveRecord::Base.connection.create_table :avatars, :force => true do |table|
-          table.column :user_id, :integer
-          table.column :style, :string
-          table.column :file_contents, :binary
-        end
-
-        reset_class("Namespace::User", :avatar).tap do |klass|
-          klass.has_attached_file :avatar, :storage => :database
-          klass.validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
-        end
+      before(:context) do
+        create_model_tables :users, :avatars
+        build_model 'Namespace::User', nil, :avatar, {}
 
         @model = Namespace::User.new
         file = File.open(fixture_file('5k.png'))
 
         @model.avatar = file
         @model.save
-
       end
-      after(:each) do
-        ActiveRecord::Base.connection.drop_table :users
-        ActiveRecord::Base.connection.drop_table :avatars
+      after(:context) do
         reset_activerecord
+        reset_database :users, :avatars
       end
 
       it "has backward compatible table name" do
