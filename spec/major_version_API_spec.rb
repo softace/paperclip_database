@@ -33,7 +33,7 @@ shared_examples_for "model in namespace" do |args|
     let(:attachment_table_name){'custom_avatars'}
     it_behaves_like "major version API compatible", :table_name => 'custom_avatars'
   end
-  describe "with custom model table_name and attachment table_name" do
+  describe "with custom model table_name and custom attachment table_name" do
     let(:model_name){"#{namespace}CaUser"}
     let(:model_table_name){'custom_users'}
     let(:attachment_name){'avatar'}
