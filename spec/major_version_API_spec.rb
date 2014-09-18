@@ -34,8 +34,8 @@ shared_examples_for "model in namespace" do |args|
     it_behaves_like "major version API compatible", :table_name => 'custom_avatars'
   end
   describe "with custom model table_name and custom attachment table_name" do
-    let(:model_name){"#{namespace}CaUser"}
-    let(:model_table_name){'custom_users'}
+    let(:model_name){"#{namespace}SUser"}
+    let(:model_table_name){'special_users'}
     let(:attachment_name){'avatar'}
     let(:attachment_table_name){'custom_avatars'}
     it_behaves_like "major version API compatible", :table_name => 'custom_avatars'
@@ -46,7 +46,7 @@ describe "PaperclipDatabase" do
   describe "backward compatibility" do
     before(:example) do
       @attachment_table_name = defined?(attachment_table_name) ? attachment_table_name : attachment_name.tableize
-      extra_paperclip_options = defined?(attachment_table_name)? {:database_table => :custom_avatars} : {}
+      extra_paperclip_options = defined?(attachment_table_name)? {:database_table => attachment_table_name.to_sym} : {}
 
       build_model model_name, (defined?(model_table_name)? model_table_name: nil), attachment_name.to_sym, extra_paperclip_options
       @model_table_name = model_name.constantize.table_name
