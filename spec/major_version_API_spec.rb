@@ -1,8 +1,5 @@
 require 'spec_helper'
 
-module Namespace
-end
-
 ##
 ## named subject 'association' is the SUT
 # args can be
@@ -17,14 +14,43 @@ shared_examples_for "major version API compatible" do |args|
   end
 end
 
+## named subject 'namespace' is the SUT
+shared_examples_for "model in namespace" do |args|
+  describe "with default options" do
+    let!(:model_name){"#{namespace}User"}
+    let!(:attachment_name){'avatar'}
+    it_behaves_like "major version API compatible", :table_name => 'avatars'
+  end
+  describe "with custom model table_name" do
+    let(:model_name){"#{namespace}CUser"}
+    let(:model_table_name){'custom_users'}
+    let(:attachment_name){'avatar'}
+    it_behaves_like "major version API compatible", :table_name => 'avatars'
+  end
+  describe "with custom attachment table_name" do
+    let(:model_name){"#{namespace}AUser"}
+    let(:attachment_name){'avatar'}
+    let(:attachment_table_name){'custom_avatars'}
+    it_behaves_like "major version API compatible", :table_name => 'custom_avatars'
+  end
+  describe "with custom model table_name and attachment table_name" do
+    let(:model_name){"#{namespace}CaUser"}
+    let(:model_table_name){'custom_users'}
+    let(:attachment_name){'avatar'}
+    let(:attachment_table_name){'custom_avatars'}
+    it_behaves_like "major version API compatible", :table_name => 'custom_avatars'
+  end
+end
+
 describe "PaperclipDatabase" do
   describe "backward compatibility" do
     before(:example) do
-      @model_table_name = defined?(model_table_name) ? model_table_name : model_name.tableize
       @attachment_table_name = defined?(attachment_table_name) ? attachment_table_name : attachment_name.tableize
       extra_paperclip_options = defined?(attachment_table_name)? {:database_table => :custom_avatars} : {}
-      create_model_tables @model_table_name, @attachment_table_name, attachment_name
+
       build_model model_name, (defined?(model_table_name)? model_table_name: nil), attachment_name.to_sym, extra_paperclip_options
+      @model_table_name = model_name.constantize.table_name
+      create_model_tables @model_table_name, @attachment_table_name, attachment_name
       @model = model_name.constantize.new
       file = File.open(fixture_file('5k.png'))
 
@@ -37,29 +63,23 @@ describe "PaperclipDatabase" do
       reset_database @model_table_name, @attachment_table_name
     end
 
-    describe "with default options" do
-      let!(:model_name){'User'}
-      let!(:attachment_name){'avatar'}
-      it_behaves_like "major version API compatible", :table_name => 'avatars'
+    describe "no namespace" do
+      subject(:namespace){''}
+      it_behaves_like "model in namespace"
     end
-    describe "with custom model table_name" do
-      let(:model_name){'CUser'}
-      let(:model_table_name){'custom_users'}
-      let(:attachment_name){'avatar'}
-      it_behaves_like "major version API compatible", :table_name => 'avatars'
+    describe "namespace '::'" do
+      subject(:namespace){'::'}
+      it_behaves_like "model in namespace"
     end
-    describe "with custom attachment table_name" do
-      let(:model_name){'AUser'}
-      let(:attachment_name){'avatar'}
-      let(:attachment_table_name){'custom_avatars'}
-      it_behaves_like "major version API compatible", :table_name => 'custom_avatars'
+    describe "namespace 'Object::'" do
+      subject(:namespace){'Object::'}
+      it_behaves_like "model in namespace"
     end
-    describe "with custom model table_name and attachment table_name" do
-      let(:model_name){'CaUser'}
-      let(:model_table_name){'custom_users'}
-      let(:attachment_name){'avatar'}
-      let(:attachment_table_name){'custom_avatars'}
-      it_behaves_like "major version API compatible", :table_name => 'custom_avatars'
+    describe "namespace 'Namespace::'" do
+      before(:context) { Object.const_set('Namespace', Module.new()) }
+      after(:context) { Object.send(:remove_const, 'Namespace') }
+      subject(:namespace){'Namespace::'}
+      it_behaves_like "model in namespace"
     end
   end
 end

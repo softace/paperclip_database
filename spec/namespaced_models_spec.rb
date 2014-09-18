@@ -1,11 +1,9 @@
 require 'spec_helper'
 
-module Namespace
-end
-
 describe "PaperclipDatabase" do
   describe "Namespaced model" do
     before(:context) do
+      Object.const_set('Namespace', Module.new())
       create_model_tables :namespace_models, :namespace_model_avatars, 'avatar'
       build_model 'Namespace::Model', 'namespace_models', :avatar, {:database_table => :namespace_model_avatars}
 
@@ -19,6 +17,7 @@ describe "PaperclipDatabase" do
     after(:context) do
       reset_activerecord
       reset_database :namespace_models, :namespace_model_avatars
+      Object.send(:remove_const, 'Namespace')
     end
 
     it "detects namespace" do
