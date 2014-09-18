@@ -19,8 +19,7 @@ describe "PaperclipDatabase" do
         table.column :file_contents, :binary
       end
 
-      Object.send(:remove_const, "UserAvatarPaperclipFile") rescue nil
-      reset_class("User").tap do |klass|
+      reset_class("User", :avatar).tap do |klass|
         klass.has_attached_file :avatar, :storage => :database
         klass.validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
       end
@@ -75,8 +74,7 @@ describe "PaperclipDatabase" do
           table.column :file_contents, :binary
         end
 
-        Namespace.send(:remove_const, :"UserAvatarPaperclipFile") rescue nil
-        reset_class("Namespace::User").tap do |klass|
+        reset_class("Namespace::User", :avatar).tap do |klass|
           klass.has_attached_file :avatar, :storage => :database
           klass.validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
         end

@@ -6,7 +6,7 @@ end
 describe "PaperclipDatabase" do
   describe "Namespaced model" do
     before(:each) do
-      reset_class("Namespace::Model").tap do |klass|
+      reset_class("Namespace::Model", :avatar).tap do |klass|
         klass.table_name = 'namespace_models'
         klass.has_attached_file :avatar, :storage => :database,
         :database_table => :namespace_model_avatars
