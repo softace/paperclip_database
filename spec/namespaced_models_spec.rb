@@ -20,16 +20,12 @@ describe "PaperclipDatabase" do
       Object.send(:remove_const, 'Namespace')
     end
 
-    it "detects namespace" do
-      expect(@model.avatar.instance_variable_get(:@paperclip_class_module)).to eq Namespace
-    end
-
     it "has correct association name" do
       expect(@model.avatar.instance_variable_get(:@paperclip_files_association_name)).to eq 'paperclip_files'
     end
 
     it "has correct model constant" do
-      expect(@model.avatar.instance_variable_get(:@paperclip_file_model).to_s).to eq 'Namespace::NamespaceModelAvatarPaperclipFile'
+      expect(@model.avatar.instance_variable_get(:@paperclip_file_model).to_s).to eq 'Namespace::Model::NamespaceModelAvatarPaperclipFile'
     end
 
     it "has correct table name" do

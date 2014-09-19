@@ -58,7 +58,7 @@ module Paperclip
 
       def self.extended(base)
         base.instance_eval do
-          setup_paperclip_class_module
+          setup_attachment_class
           setup_paperclip_file_model
           setup_paperclip_files_association
           override_default_options base
@@ -95,10 +95,10 @@ module Paperclip
 
       def setup_paperclip_file_model
         class_name = "#{instance.class.table_name.singularize}_#{name.to_s}_paperclip_file".classify
-        if @paperclip_class_module.const_defined?(class_name, false)
-          @paperclip_file_model = @paperclip_class_module.const_get(class_name, false)
+        if @attachment_class.const_defined?(class_name, false)
+          @paperclip_file_model = @attachment_class.const_get(class_name, false)
         else
-          @paperclip_file_model = @paperclip_class_module.const_set(class_name, Class.new(::ActiveRecord::Base))
+          @paperclip_file_model = @attachment_class.const_set(class_name, Class.new(::ActiveRecord::Base))
           @paperclip_file_model.table_name = @options[:database_table] || name.to_s.pluralize
           @paperclip_file_model.validates_uniqueness_of :style, :scope => instance.class.table_name.classify.underscore + '_id'
           @paperclip_file_model.scope :file_for, lambda {|style| @paperclip_file_model.where('style = ?', style) }
@@ -106,16 +106,17 @@ module Paperclip
       end
       private :setup_paperclip_file_model
 
-      def setup_paperclip_class_module
-        # If the model is in a namespace, look up that module
-        if instance.class.name.include?('::')
-          module_name = PaperclipDatabase::deconstantize(instance.class.name)
-          @paperclip_class_module = module_name.constantize rescue Object
-        else
-          @paperclip_class_module = Object
+      def setup_attachment_class
+        instance.class.ancestors.each do |ancestor|
+          # Pick the top-most definition like
+          # Paperclip::AttachmentRegistry#definitions_for
+          names_for_ancestor = ancestor.attachment_definitions.keys rescue []
+          if names_for_ancestor.member?(name)
+            @attachment_class = ancestor
+          end
         end
       end
-      private :setup_paperclip_class_module
+      private :setup_attachment_class
 
       def copy_to_local_file(style, dest_path)
         File.open(dest_path, 'wb+'){|df| to_file(style).tap{|sf| File.copy_stream(sf, df); sf.close;sf.unlink} }

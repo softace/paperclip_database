@@ -64,7 +64,7 @@ end
 
 def reset_class class_name, attachment_name
   if class_name.include? '::'
-    module_name = PaperclipDatabase::deconstantize(class_name)
+    module_name = class_name[0...(class_name.rindex('::') || 0)]
     class_module = module_name.constantize rescue Object
   else
     class_module = Object

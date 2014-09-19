@@ -25,7 +25,7 @@ describe "PaperclipDatabase" do
     end
 
     it "has correct model constant" do
-      expect(@model.avatar.instance_variable_get(:@paperclip_file_model).to_s).to eq 'UserAvatarPaperclipFile'
+      expect(@model.avatar.instance_variable_get(:@paperclip_file_model).to_s).to eq 'User::UserAvatarPaperclipFile'
     end
 
     it "has correct table name" do

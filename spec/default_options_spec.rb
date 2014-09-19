@@ -23,16 +23,12 @@ describe "PaperclipDatabase" do
       expect(@model.avatar.instance_variable_get(:@database_table)).to eq 'avatars'
     end
 
-    it "detects no namespace" do
-      expect(@model.avatar.instance_variable_get(:@paperclip_class_module)).to eq Object
-    end
-
     it "has association name" do
       expect(@model.avatar.instance_variable_get(:@paperclip_files_association_name)).to eq 'paperclip_files'
     end
 
     it "has model constant" do
-      expect(@model.avatar.instance_variable_get(:@paperclip_file_model).to_s).to eq 'UserAvatarPaperclipFile'
+      expect(@model.avatar.instance_variable_get(:@paperclip_file_model).to_s).to eq 'User::UserAvatarPaperclipFile'
     end
 
     it "has association" do
@@ -62,16 +58,12 @@ describe "PaperclipDatabase" do
         expect(@model.avatar.instance_variable_get(:@database_table)).to eq 'avatars'
       end
 
-      it "detects namespace" do
-        expect(@model.avatar.instance_variable_get(:@paperclip_class_module)).to eq Namespace
-      end
-
       it "has association name" do
         expect(@model.avatar.instance_variable_get(:@paperclip_files_association_name)).to eq 'paperclip_files'
       end
 
       it "has model constant" do
-        expect(@model.avatar.instance_variable_get(:@paperclip_file_model).to_s).to eq 'Namespace::UserAvatarPaperclipFile'
+        expect(@model.avatar.instance_variable_get(:@paperclip_file_model).to_s).to eq 'Namespace::User::UserAvatarPaperclipFile'
       end
 
       it "has association" do
