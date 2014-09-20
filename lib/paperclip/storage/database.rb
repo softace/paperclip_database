@@ -170,6 +170,10 @@ module Paperclip
       end
       alias_method :to_io, :to_file
 
+      def files
+        instance.send("#{@paperclip_files_association_name}")
+      end
+
       def file_for(style)
         db_result = instance.send("#{@paperclip_files_association_name}").send(:file_for, style.to_s)
         raise RuntimeError, "More than one result for #{style}" if db_result.size > 1
