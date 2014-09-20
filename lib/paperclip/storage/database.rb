@@ -82,7 +82,7 @@ module Paperclip
       end
 
       def setup_paperclip_files_association
-        @paperclip_files_association_name = 'paperclip_files'
+        @paperclip_files_association_name = @paperclip_file_model.name.demodulize.tableize
         @database_table = @paperclip_file_model.table_name
         #FIXME: This fails when using  set_table_name "<myname>" in your model
         #FIXME: This should be fixed in ActiveRecord...
