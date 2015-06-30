@@ -4,6 +4,7 @@ rvm:
   - 2.0.0
   - 2.1.1
   - 2.1.2
+  - 2.2.5
 gemfile:
   - gemfiles/rails30_paperclip23.gemfile
   - gemfiles/rails30_paperclip2x.gemfile
@@ -23,3 +24,14 @@ gemfile:
   - gemfiles/rails40_paperclip4x.gemfile
   - gemfiles/rails41_paperclip42.gemfile
   - gemfiles/rails41_paperclip4x.gemfile
+  - gemfiles/rails50_paperclip4x.gemfile
+matrix:
+  exclude:
+    - gemfile: gemfiles/rails50_paperclip4x.gemfile
+      rvm: 1.9.3
+    - gemfile: gemfiles/rails50_paperclip4x.gemfile
+      rvm: 2.0.0
+    - gemfile: gemfiles/rails50_paperclip4x.gemfile
+      rvm: 2.1.1
+    - gemfile: gemfiles/rails50_paperclip4x.gemfile
+      rvm: 2.1.2
