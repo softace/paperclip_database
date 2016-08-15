@@ -2,11 +2,12 @@ Paperclip Database Storage
 ==========================
 
 [![Build Status](https://travis-ci.org/softace/paperclip_database.png)](http://travis-ci.org/softace/paperclip_database)
+[![Gem Version](https://badge.fury.io/rb/paperclip_database.svg)](http://badge.fury.io/rb/paperclip_database)
 [![Dependency Status](https://gemnasium.com/softace/paperclip_database.png)](https://gemnasium.com/softace/paperclip_database)
 [![Code Climate](https://codeclimate.com/github/softace/paperclip_database.png)](https://codeclimate.com/github/softace/paperclip_database)
 
 Paperclip Database Storage is an additional storage option for
-Paperclip. It give you the opportunity to store your paperclip binary
+Paperclip. It gives you the opportunity to store your paperclip binary
 file uploads in the database along with all your other data.
 
 Requirements
@@ -43,7 +44,7 @@ Supported Versions
 ------------------
 
 As of version 2.0, Rails 2 is no longer supported.
-Supported version are rails >= 3.0 and paperclip version >= 2.5
+Supported version are rails >= 3.0 and paperclip version >= 2.3
 
 Quick Start
 -----------
@@ -93,9 +94,10 @@ To start develop, please download the source code
 When downloaded, you can start issuing the commands like
 
     bundle install
-    bundle exec rake appraisal:gemfiles
-    bundle exec rake appraisal:install
-    bundle exec rake all
+    bundle exec appraisal clean
+    bundle exec appraisal generate
+    bundle exec appraisal install
+    bundle exec appraisal rake
 
 Or you can see what other options are there:
 

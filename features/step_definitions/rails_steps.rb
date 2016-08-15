@@ -151,7 +151,7 @@ Then /^the file at "([^"]*)" should be the same as "([^"]*)"$/ do |web_file, pat
     visit(web_file)
     page.source
   end
-  actual.should == expected
+  expect(actual).to eq expected
 end
 
 When /^I configure the application to use "([^\"]+)" from this project$/ do |name|
@@ -178,7 +178,7 @@ end
 Then /^the result of "(.*?)" should be the same as "(.*?)"$/ do |rails_expr, path|
   expected = IO.binread(path)
   actual = eval "#{rails_expr}"
-  actual.should == expected
+  expect(actual).to eq expected
 end
 
 

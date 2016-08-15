@@ -38,8 +38,8 @@ Feature: Rails integration
     And I start the rails application
     When I go to the new user page
     And I fill in "Name" with "something"
-    And I attach the file "test/fixtures/5k.png" to "Avatar"
+    And I attach the file "spec/fixtures/5k.png" to "Avatar"
     And I press "Submit"
     Then I should see "Name: something"
     And I should see an image with a path of "/avatar_views/1?style=original"
-    And the file at "/avatar_views/1?style=original" should be the same as "test/fixtures/5k.png"
+    And the file at "/avatar_views/1?style=original" should be the same as "spec/fixtures/5k.png"

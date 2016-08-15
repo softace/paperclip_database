@@ -58,7 +58,7 @@ module Paperclip
 
       def self.extended(base)
         base.instance_eval do
-          setup_paperclip_class_module
+          setup_attachment_class
           setup_paperclip_file_model
           setup_paperclip_files_association
           override_default_options base
@@ -94,11 +94,11 @@ module Paperclip
       private :setup_paperclip_files_association
 
       def setup_paperclip_file_model
-        class_name = "#{instance.class.name.demodulize.underscore}_#{name.to_s}_paperclip_file".classify
-        if @paperclip_class_module.const_defined?(class_name)
-          @paperclip_file_model = @paperclip_class_module.const_get(class_name)
+        class_name = "#{instance.class.table_name.singularize}_#{name.to_s}_paperclip_file".classify
+        if @attachment_class.const_defined?(class_name, false)
+          @paperclip_file_model = @attachment_class.const_get(class_name, false)
         else
-          @paperclip_file_model = @paperclip_class_module.const_set(class_name, Class.new(::ActiveRecord::Base))
+          @paperclip_file_model = @attachment_class.const_set(class_name, Class.new(::ActiveRecord::Base))
           @paperclip_file_model.table_name = @options[:database_table] || name.to_s.pluralize
           @paperclip_file_model.validates_uniqueness_of :style, :scope => instance.class.table_name.classify.underscore + '_id'
           @paperclip_file_model.scope :file_for, lambda {|style| @paperclip_file_model.where('style = ?', style) }
@@ -106,16 +106,17 @@ module Paperclip
       end
       private :setup_paperclip_file_model
 
-      def setup_paperclip_class_module
-        # If the model is in a namespace, look up that module
-        if instance.class.name.include?('::')
-          module_name = PaperclipDatabase::deconstantize(instance.class.name)
-          @paperclip_class_module = module_name.constantize rescue Object
-        else
-          @paperclip_class_module = Object
+      def setup_attachment_class
+        instance.class.ancestors.each do |ancestor|
+          # Pick the top-most definition like
+          # Paperclip::AttachmentRegistry#definitions_for
+          names_for_ancestor = ancestor.attachment_definitions.keys rescue []
+          if names_for_ancestor.member?(name)
+            @attachment_class = ancestor
+          end
         end
       end
-      private :setup_paperclip_class_module
+      private :setup_attachment_class
 
       def copy_to_local_file(style, dest_path)
         File.open(dest_path, 'wb+'){|df| to_file(style).tap{|sf| File.copy_stream(sf, df); sf.close;sf.unlink} }
@@ -169,6 +170,10 @@ module Paperclip
       end
       alias_method :to_io, :to_file
 
+      def files
+        instance.send("#{@paperclip_files_association_name}")
+      end
+
       def file_for(style)
         db_result = instance.send("#{@paperclip_files_association_name}").send(:file_for, style.to_s)
         raise RuntimeError, "More than one result for #{style}" if db_result.size > 1
@@ -182,13 +187,13 @@ module Paperclip
       def flush_writes
         ActiveRecord::Base.logger.info("[paperclip] Writing files for #{name}")
         @queued_for_write.each do |style, file|
-            case Rails::VERSION::STRING
-            when /^3/
+            case ActiveModel::VERSION::MAJOR
+            when 3
               paperclip_file = instance.send(@paperclip_files_association_name).send(:find_or_create_by_style, style.to_s)
-            when /^4/
+            when 4
               paperclip_file = instance.send(@paperclip_files_association_name).send(:find_or_create_by, style: style.to_s)
             else
-              raise "Rails version #{Rails::VERSION::STRING} is not supported (yet)"
+              raise "ActiveModel version #{ActiveModel::VERSION::STRING} is not supported (yet)"
             end
           paperclip_file.file_contents = file.read
           paperclip_file.file_name = file.original_filename
@@ -219,7 +224,8 @@ module Paperclip
         end
         def downloads_files_for(model, attachment, options = {})
           define_method("#{attachment.to_s.pluralize}") do
-            model_record = Object.const_get(model.to_s.camelize.to_sym).find(params[:id])
+            #FIXME: Handling Namespaces
+            model_record = Object.const_get(model.to_s.camelize.to_sym, false).find(params[:id])
             style = params[:style] ? params[:style] : 'original'
             send_data model_record.send(attachment).file_contents(style),
                       :filename => model_record.send("#{attachment}_file_name".to_sym),

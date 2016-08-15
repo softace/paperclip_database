@@ -103,11 +103,10 @@ When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"$/ do |path, field|
 end
 
 Then /^(?:|I )should (not )?see "([^"]*)"$/ do |negate, text|
-  should_name = negate ? :should_not : :should
-  if page.respond_to? should_name
-    page.send should_name, have_content(text)
+  if negate
+    expect(page).not_to have_content(text)
   else
-    assert(negate ? page.has_no_content?(text) : page.has_content?(text))
+    expect(page).to have_content(text)
   end
 end
 

@@ -3,6 +3,7 @@ rvm:
   - 1.9.3
   - 2.0.0
   - 2.1.1
+  - 2.1.2
 gemfile:
   - gemfiles/rails30_paperclip23.gemfile
   - gemfiles/rails30_paperclip2x.gemfile
@@ -18,7 +19,7 @@ gemfile:
   - gemfiles/rails32_paperclip3x.gemfile
   - gemfiles/rails32_paperclip40.gemfile
   - gemfiles/rails32_paperclip4x.gemfile
-  - gemfiles/rails40_paperclip34.gemfile
-  - gemfiles/rails40_paperclip3x.gemfile
-  - gemfiles/rails40_paperclip40.gemfile
+  - gemfiles/rails40_paperclip42.gemfile
   - gemfiles/rails40_paperclip4x.gemfile
+  - gemfiles/rails41_paperclip42.gemfile
+  - gemfiles/rails41_paperclip4x.gemfile

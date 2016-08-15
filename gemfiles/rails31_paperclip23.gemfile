@@ -4,6 +4,6 @@ source "http://rubygems.org"
 
 gem "rails", "~> 3.1.0"
 gem "paperclip", "~> 2.3.0"
-gem "paperclip_database", :path=>"../"
+gem "paperclip_database", :path => "../"
 
-gemspec :path=>"../"
+gemspec :path => "../"

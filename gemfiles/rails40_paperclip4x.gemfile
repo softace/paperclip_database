@@ -3,7 +3,8 @@
 source "http://rubygems.org"
 
 gem "rails", "~> 4.0.0"
-gem "paperclip", "~> 4.0"
-gem "paperclip_database", :path=>"../"
+gem "minitest", "~> 4.2"
+gem "paperclip", "~> 4.2"
+gem "paperclip_database", :path => "../"
 
-gemspec :path=>"../"
+gemspec :path => "../"

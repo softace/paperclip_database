@@ -15,16 +15,17 @@ Gem::Specification.new do |s|
   s.license           = 'MIT'
 
   s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  s.test_files    = `git ls-files -- {spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
   s.requirements << "ImageMagick"
 
-  s.add_dependency('rails', '>= 3.0.0')
   s.add_dependency('paperclip', '>= 2.3.0')
 
-  s.add_development_dependency('appraisal', '~> 0.4')
+  s.add_development_dependency('rspec', '~> 3.1')
+  s.add_development_dependency('appraisal', '~> 1.0')
+#  s.add_development_dependency('rails', '>= 3.0.0') # Appraisal
   s.add_development_dependency('mocha')
   s.add_development_dependency('sqlite3', '~> 1.3')
   s.add_development_dependency('cucumber', '~> 1.1')
