@@ -181,7 +181,7 @@ module Paperclip
       end
 
       def file_contents(style = default_style)
-        file_for(style).file_contents
+        file_for(style).file_contents.force_encoding(Encoding.default_internal)
       end
 
       def flush_writes
