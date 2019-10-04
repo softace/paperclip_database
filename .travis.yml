@@ -1,17 +1,11 @@
 language: ruby
 rvm:
-  - 2.1.10
-  - 2.2.10
   - 2.3.8
+  - 2.4.9
 gemfile:
-  - gemfiles/rails32_paperclip2x.gemfile
-  - gemfiles/rails32_paperclip3x.gemfile
-  - gemfiles/rails32_paperclip4x.gemfile
-  - gemfiles/rails40_paperclip4x.gemfile
-  - gemfiles/rails41_paperclip4x.gemfile
   - gemfiles/rails42_paperclip4x.gemfile
+  - gemfiles/rails42_paperclip5x.gemfile
+  - gemfiles/rails42_paperclip6x.gemfile
   - gemfiles/rails50_paperclip4x.gemfile
-matrix:
-  exclude:
-  - rvm: 2.1.10
-    gemfile: gemfiles/rails50_paperclip42.gemfile
+  - gemfiles/rails50_paperclip5x.gemfile
+  - gemfiles/rails50_paperclip6x.gemfile

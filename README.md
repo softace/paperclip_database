@@ -44,7 +44,8 @@ Supported Versions
 ------------------
 
 As of version 2.0, Rails 2 is no longer supported.
-Supported version are rails >= 3.0 and paperclip version >= 2.3
+As of version 3.0, Rails 3 is no longer supported.
+Supported version are rails >= 4.2 and paperclip version >= 2.3
 
 Quick Start
 -----------

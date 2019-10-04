@@ -1,3 +1,3 @@
 module PaperclipDatabase
-  VERSION = "2.4.0" unless defined? PaperclipDatabase::VERSION
+  VERSION = "3.0.0" unless defined? PaperclipDatabase::VERSION
 end
