@@ -18,7 +18,7 @@ module PaperclipDatabase
       end
 
       def generate_migration
-        migration_template "migration.rb.erb", "db/migrate/#{migration_file_name}"
+        migration_template "migration.rb.erb", "db/migrate/#{migration_file_name}", migration_version: migration_version
       end
 
       def migration_name
@@ -31,6 +31,12 @@ module PaperclipDatabase
 
       def migration_class_name
         migration_name.camelize
+      end
+
+      def migration_version
+        if Rails.version.to_i >= 5
+          "[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]"
+        end
       end
 
     end
