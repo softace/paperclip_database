@@ -48,6 +48,7 @@ appraise "rails50_paperclip6x" do
   gem 'capybara'
   gem 'rspec'
   gem 'sqlite3', '~> 1.3.0'
+  gem 'bootsnap', '~> 1.0', require: false
 end
 
 appraise "rails51_paperclip6x" do
@@ -56,13 +57,15 @@ appraise "rails51_paperclip6x" do
   gem 'capybara'
   gem 'rspec'
   gem 'sqlite3', '~> 1.3.0'
+  gem 'bootsnap', '~> 1.0', require: false
 end
 
-# appraise "rails52_paperclip6x" do
-#   gem "rails", "~> 5.2.0"
-#   gem "paperclip", "~> 6.0"
-#   gem 'capybara'
-#   gem 'rspec'
-#   gem 'sqlite3', '~> 1.3.0'
-# end
+appraise "rails52_paperclip6x" do
+  gem "rails", "~> 5.2.0"
+  gem "paperclip", "~> 6.0"
+  gem 'capybara'
+  gem 'rspec'
+  gem 'sqlite3', '~> 1.3.0'
+  gem 'bootsnap', '~> 1.0', require: false
+end
 

@@ -2,7 +2,7 @@
 
 source "http://rubygems.org"
 
-gem "rails", "~> 5.0.0"
+gem "rails", "~> 5.2.0"
 gem "paperclip", "~> 6.0"
 gem "capybara"
 gem "rspec"

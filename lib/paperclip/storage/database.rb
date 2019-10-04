@@ -104,7 +104,7 @@ module Paperclip
           case ActiveModel::VERSION::MAJOR
           when 3, 4
             @paperclip_file_model.scope :file_for, lambda {|style| @paperclip_file_model.where('style = ?', style) }
-          when 5
+          when 5,6
             @paperclip_file_model.scope :file_for, lambda {|style| where('style = ?', style) }
           else
             raise "ActiveModel version #{ActiveModel::VERSION::STRING} is not supported (yet)"
@@ -197,9 +197,7 @@ module Paperclip
             case ActiveModel::VERSION::MAJOR
             when 3
               paperclip_file = instance.send(@paperclip_files_association_name).send(:find_or_create_by_style, style.to_s)
-            when 4
-              paperclip_file = instance.send(@paperclip_files_association_name).send(:find_or_create_by, style: style.to_s)
-            when 5
+            when 4,5,6
               paperclip_file = instance.send(@paperclip_files_association_name).send(:find_or_create_by, style: style.to_s)
             else
               raise "ActiveModel version #{ActiveModel::VERSION::STRING} is not supported (yet)"
