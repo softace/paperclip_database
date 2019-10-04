@@ -115,10 +115,11 @@ module Paperclip
 
       def setup_attachment_class
         instance.class.ancestors.each do |ancestor|
+          next unless ancestor.respond_to?(:attachment_definitions)
+
           # Pick the top-most definition like
           # Paperclip::AttachmentRegistry#definitions_for
-          names_for_ancestor = ancestor.attachment_definitions.keys rescue []
-          if names_for_ancestor.member?(name)
+          if ancestor.attachment_definitions.member?(name)
             @attachment_class = ancestor
           end
         end
