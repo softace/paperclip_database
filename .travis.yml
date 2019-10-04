@@ -2,6 +2,8 @@ language: ruby
 rvm:
   - 2.3.8
   - 2.4.9
+  - 2.5.7
+  - 2.6.5
 gemfile:
   - gemfiles/rails42_paperclip4x.gemfile
   - gemfiles/rails42_paperclip5x.gemfile
@@ -9,3 +11,9 @@ gemfile:
   - gemfiles/rails50_paperclip4x.gemfile
   - gemfiles/rails50_paperclip5x.gemfile
   - gemfiles/rails50_paperclip6x.gemfile
+  # - gemfiles/rails51_paperclip4x.gemfile
+  # - gemfiles/rails51_paperclip5x.gemfile
+  # - gemfiles/rails51_paperclip6x.gemfile
+  # - gemfiles/rails52_paperclip4x.gemfile
+  # - gemfiles/rails52_paperclip5x.gemfile
+  # - gemfiles/rails52_paperclip6x.gemfile
