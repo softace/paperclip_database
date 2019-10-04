@@ -14,7 +14,7 @@ end
 
 Given "I fix the application.rb for 3.0.12" do
   ##See https://github.com/rails/rails/issues/9619
-  in_current_dir do
+  in_current_directory do
     File.open("config/application.rb", "a") do |f|
       f << "ActionController::Base.config.relative_url_root = ''"
     end
@@ -22,7 +22,7 @@ Given "I fix the application.rb for 3.0.12" do
 end
 
 Given "I allow the attachment to be submitted" do
-  in_current_dir do
+  in_current_directory do
     if framework_major_version == 3
       transform_file("app/models/user.rb") do |content|
         content.gsub("attr_accessible :name",
@@ -38,7 +38,7 @@ Given "I allow the attachment to be submitted" do
 end
 
 Given "I remove turbolinks" do
-  in_current_dir do
+  in_current_directory do
     transform_file("app/assets/javascripts/application.js") do |content|
       content.gsub("//= require turbolinks", "")
     end
@@ -49,7 +49,7 @@ Given "I remove turbolinks" do
 end
 
 Given "I empty the application.js file" do
-  in_current_dir do
+  in_current_directory do
     transform_file("app/assets/javascripts/application.js") do |content|
       ""
     end
@@ -99,14 +99,14 @@ end
 
 Given /^I add this snippet to the User model:$/ do |snippet|
   file_name = "app/models/user.rb"
-  in_current_dir do
+  in_current_directory do
     content = File.read(file_name)
     File.open(file_name, 'w') { |f| f << content.sub(/end\Z/, "#{snippet}\nend") }
   end
 end
 
 Given /^I replace \/(.*?)\/ with this snippet in the "(.*?)" controller:$/ do |pattern, controller_name, snippet|
-  in_current_dir do
+  in_current_directory do
     transform_file("app/controllers/#{controller_name}_controller.rb") do |content|
       content.gsub(Regexp.new(pattern, Regexp::MULTILINE), snippet)
     end
@@ -114,7 +114,7 @@ Given /^I replace \/(.*?)\/ with this snippet in the "(.*?)" controller:$/ do |p
 end
 
 Given /^I start the rails application$/ do
-  in_current_dir do
+  in_current_directory do
     require "./config/environment"
     require "capybara/rails"
   end
@@ -125,7 +125,7 @@ Given /^I reload my application$/ do
 end
 
 When %r{I turn off class caching} do
-  in_current_dir do
+  in_current_directory do
     file = "config/environments/test.rb"
     config = IO.read(file)
     config.gsub!(%r{^\s*config.cache_classes.*$},
@@ -175,7 +175,7 @@ end
 
 module FileHelpers
   def append_to(path, contents)
-    in_current_dir do
+    in_current_directory do
       File.open(path, "a") do |file|
         file.puts
         file.puts contents
@@ -188,7 +188,7 @@ module FileHelpers
   end
 
   def comment_out_gem_in_gemfile(gemname)
-    in_current_dir do
+    in_current_directory do
       gemfile = File.read("Gemfile")
       gemfile.sub!(/^(\s*)(gem\s*['"]#{gemname})/, "\\1# \\2")
       File.open("Gemfile", 'w'){ |file| file.write(gemfile) }
