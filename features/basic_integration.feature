@@ -41,5 +41,5 @@ Feature: Rails integration
     And I attach the file "spec/fixtures/5k.png" to "Avatar"
     And I press "Submit"
     Then I should see "Name: something"
-    And I should see an image with a path of "/avatar_views/1?style=original"
-    And the file at "/avatar_views/1?style=original" should be the same as "spec/fixtures/5k.png"
+    And I should see an image with a path of "/avatar_views/1"
+    And the file at "/avatar_views/1" should be the same as "spec/fixtures/5k.png"
