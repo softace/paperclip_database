@@ -10,3 +10,8 @@ gemfile:
   - gemfiles/rails40_paperclip42.gemfile
   - gemfiles/rails41_paperclip42.gemfile
   - gemfiles/rails42_paperclip42.gemfile
+  - gemfiles/rails50_paperclip42.gemfile
+matrix:
+  exclude:
+  - rvm: 2.1.10
+    gemfile: gemfiles/rails50_paperclip42.gemfile

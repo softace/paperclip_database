@@ -56,12 +56,12 @@ appraise "rails42_paperclip42" do
   gem 'sqlite3', '~> 1.3.0'
 end
 
-# #Requires ruby >= 2.2.2
-# appraise "rails50_paperclip42" do
-#   gem "rails", "~> 5.0.0"
-#   gem "paperclip", "~> 4.2", '<= 4.2.0'
-#   gem 'capybara'
-#   gem 'rspec'
-#   gem 'sqlite3', '~> 1.3.0'
-# end
+#Requires ruby >= 2.2.2
+appraise "rails50_paperclip42" do
+  gem "rails", "~> 5.0.0"
+  gem "paperclip", "~> 4.2", '<= 4.2.0'
+  gem 'capybara'
+  gem 'rspec'
+  gem 'sqlite3', '~> 1.3.0'
+end
 

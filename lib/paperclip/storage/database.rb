@@ -101,7 +101,14 @@ module Paperclip
           @paperclip_file_model = @attachment_class.const_set(class_name, Class.new(::ActiveRecord::Base))
           @paperclip_file_model.table_name = @options[:database_table] || name.to_s.pluralize
           @paperclip_file_model.validates_uniqueness_of :style, :scope => instance.class.table_name.classify.underscore + '_id'
-          @paperclip_file_model.scope :file_for, lambda {|style| @paperclip_file_model.where('style = ?', style) }
+          case ActiveModel::VERSION::MAJOR
+          when 3, 4
+            @paperclip_file_model.scope :file_for, lambda {|style| @paperclip_file_model.where('style = ?', style) }
+          when 5
+            @paperclip_file_model.scope :file_for, lambda {|style| where('style = ?', style) }
+          else
+            raise "ActiveModel version #{ActiveModel::VERSION::STRING} is not supported (yet)"
+          end
         end
       end
       private :setup_paperclip_file_model
@@ -191,6 +198,8 @@ module Paperclip
             when 3
               paperclip_file = instance.send(@paperclip_files_association_name).send(:find_or_create_by_style, style.to_s)
             when 4
+              paperclip_file = instance.send(@paperclip_files_association_name).send(:find_or_create_by, style: style.to_s)
+            when 5
               paperclip_file = instance.send(@paperclip_files_association_name).send(:find_or_create_by, style: style.to_s)
             else
               raise "ActiveModel version #{ActiveModel::VERSION::STRING} is not supported (yet)"
