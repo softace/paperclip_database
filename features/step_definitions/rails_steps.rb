@@ -4,15 +4,6 @@ Given /^I generate a new rails application$/ do
     And I cd to "#{APP_NAME}"
     And I turn off class caching
     And I fix the application.rb for 3.0.12
-    And I write to "Gemfile" with:
-      """
-      source "http://rubygems.org"
-      gem "rails", "#{framework_version}"
-      gem "sqlite3"
-      gem "capybara"
-      gem "gherkin"
-      gem "paperclip", "#{paperclip_version}"
-      """
     And I remove turbolinks
     And I empty the application.js file
     And I configure the application to use "paperclip_database" from this project

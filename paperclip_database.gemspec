@@ -27,12 +27,12 @@ Gem::Specification.new do |s|
   s.add_development_dependency('appraisal', '~> 1.0')
 #  s.add_development_dependency('rails', '>= 3.0.0') # Appraisal
   s.add_development_dependency('mocha')
-  s.add_development_dependency('sqlite3', '~> 1.3')
+  s.add_development_dependency('sqlite3', '~> 1.3.0')
   s.add_development_dependency('cucumber', '~> 1.1')
   s.add_development_dependency('launchy', '~> 2.1')
   s.add_development_dependency('aruba')
   s.add_development_dependency('capybara', '~> 2.0.0', '< 2.1.0')
-  s.add_development_dependency('bundler')
+  s.add_development_dependency('bundler', '< 2.0')
   s.add_development_dependency('rake')
   s.add_development_dependency('fakeweb')
 end
