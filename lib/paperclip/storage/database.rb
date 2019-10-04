@@ -100,6 +100,7 @@ module Paperclip
         else
           @paperclip_file_model = @attachment_class.const_set(class_name, Class.new(::ActiveRecord::Base))
           @paperclip_file_model.table_name = @options[:database_table] || name.to_s.pluralize
+          @paperclip_file_model.attr_accessible :style
           @paperclip_file_model.validates_uniqueness_of :style, :scope => instance.class.table_name.classify.underscore + '_id'
           case ActiveModel::VERSION::MAJOR
           when 3, 4
